@@ -15,11 +15,11 @@ import {
 } from "lucide-react";
 
 const SERVICE_OPTIONS = [
-  { id: "digital", label: "Digital Marketing & Social" },
-  { id: "branding", label: "Brand Identity & Guidelines" },
-  { id: "creative", label: "Creative & Content Production" },
-  { id: "packaging", label: "Packaging, Menus & Print" },
-  { id: "strategy", label: "Marketing Strategy & Consulting" },
+  { id: "digital", label: "Digital Marketing" },
+  { id: "branding", label: "Brand Identity" },
+  { id: "creative", label: "Creative & Content" },
+  { id: "packaging", label: "Packaging & Print" },
+  { id: "strategy", label: "Marketing Solutions" },
 ];
 
 const BUDGET_RANGES = [

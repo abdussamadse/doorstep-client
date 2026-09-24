@@ -59,30 +59,49 @@ export const CLIENT_BRANDS: ClientBrand[] = [
   },
 ];
 
-export default function ClientLogosMarquee() {
-  // Duplicate array so it loops seamlessly from right to left
-  const marqueeItems = [...CLIENT_BRANDS, ...CLIENT_BRANDS];
+export default function ClientLogosGrid() {
+  const line1 = CLIENT_BRANDS.slice(0, 4);
+  const line2 = CLIENT_BRANDS.slice(4, 8);
 
   return (
-    <div className="relative w-full overflow-hidden py-4 border-y border-[#E3E5EC] bg-white">
-      {/* Subtle edge fades for smooth marquee entry and exit */}
-      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-white via-white/80 to-transparent" />
-      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-white via-white/80 to-transparent" />
-
-      <div className="animate-marquee items-center gap-6">
-        {marqueeItems.map((client, idx) => (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2.5 sm:space-y-4">
+      {/* Line 1 (4 Brands) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+        {line1.map((client, idx) => (
           <div
             key={idx}
-            className="flex items-center gap-3.5 px-6 py-4 rounded-xl border border-[#E3E5EC] bg-[#FDFDFC] hover:border-gray-400 hover:shadow-xs transition-all duration-200 shrink-0 group cursor-default"
+            className="flex items-center gap-2 sm:gap-3.5 p-2.5 sm:p-4 rounded-xl border border-[#E3E5EC] bg-[#FDFDFC] hover:border-[#12151B] hover:shadow-xs transition-all duration-200 group cursor-default"
           >
-            <div className="p-2 rounded-lg bg-[#F4F5F8] border border-[#E3E5EC] group-hover:scale-110 transition-transform">
+            <div className="p-1.5 sm:p-2.5 rounded-lg bg-[#F4F5F8] border border-[#E3E5EC] group-hover:scale-105 group-hover:bg-[#12151B] group-hover:text-white transition-all shrink-0">
               {client.icon}
             </div>
-            <div>
-              <div className="font-display font-bold text-sm text-[#12151B] tracking-tight group-hover:text-[#2954F5] transition-colors whitespace-nowrap">
+            <div className="min-w-0">
+              <div className="font-display font-bold text-xs sm:text-sm text-[#12151B] tracking-tight group-hover:text-[#2954F5] transition-colors truncate">
                 {client.name}
               </div>
-              <div className="text-[11px] font-medium text-[#5B5F6B] whitespace-nowrap">
+              <div className="text-[10px] sm:text-[11px] font-medium text-[#5B5F6B] truncate">
+                {client.category} · {client.location}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Line 2 (4 Brands) */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
+        {line2.map((client, idx) => (
+          <div
+            key={idx}
+            className="flex items-center gap-2 sm:gap-3.5 p-2.5 sm:p-4 rounded-xl border border-[#E3E5EC] bg-[#FDFDFC] hover:border-[#12151B] hover:shadow-xs transition-all duration-200 group cursor-default"
+          >
+            <div className="p-1.5 sm:p-2.5 rounded-lg bg-[#F4F5F8] border border-[#E3E5EC] group-hover:scale-105 group-hover:bg-[#12151B] group-hover:text-white transition-all shrink-0">
+              {client.icon}
+            </div>
+            <div className="min-w-0">
+              <div className="font-display font-bold text-xs sm:text-sm text-[#12151B] tracking-tight group-hover:text-[#2954F5] transition-colors truncate">
+                {client.name}
+              </div>
+              <div className="text-[10px] sm:text-[11px] font-medium text-[#5B5F6B] truncate">
                 {client.category} · {client.location}
               </div>
             </div>
