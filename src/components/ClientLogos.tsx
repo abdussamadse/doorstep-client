@@ -1,113 +1,52 @@
 import React from "react";
-import { Coffee, UtensilsCrossed, Sparkles, Sprout, Store, Layers, Building2, Flame } from "lucide-react";
 
-export interface ClientBrand {
+export interface ClientLogoItem {
   name: string;
-  category: string;
-  location: string;
-  icon: React.ReactNode;
+  src: string;
+  theme?: "blue" | "red";
 }
 
-export const CLIENT_BRANDS: ClientBrand[] = [
-  {
-    name: "Caffeine Coffee",
-    category: "Specialty Beverage & Cafe",
-    location: "Dhaka",
-    icon: <Coffee className="w-5 h-5 text-[#2954F5]" />,
-  },
-  {
-    name: "Chefs Canvas",
-    category: "Hospitality & Food Court",
-    location: "Faridpur",
-    icon: <UtensilsCrossed className="w-5 h-5 text-[#E51F25]" />,
-  },
-  {
-    name: "Indian Masala",
-    category: "Culinary & Quick Service",
-    location: "Dhaka",
-    icon: <Flame className="w-5 h-5 text-[#2954F5]" />,
-  },
-  {
-    name: "Bose Agro",
-    category: "Agri-Commodities & B2B Trading",
-    location: "Nationwide",
-    icon: <Sprout className="w-5 h-5 text-emerald-600" />,
-  },
-  {
-    name: "Dining Hub Food Court",
-    category: "Multi-Cuisine Retail Destination",
-    location: "Dhaka",
-    icon: <Store className="w-5 h-5 text-[#E51F25]" />,
-  },
-  {
-    name: "Bengal Brews",
-    category: "Artisanal Beverages",
-    location: "Dhaka",
-    icon: <Coffee className="w-5 h-5 text-[#2954F5]" />,
-  },
-  {
-    name: "Artisan Living",
-    category: "Lifestyle & Retail Goods",
-    location: "Dhaka",
-    icon: <Layers className="w-5 h-5 text-[#12151B]" />,
-  },
-  {
-    name: "Heritage Foods",
-    category: "FMCG & Consumer Goods",
-    location: "Chittagong",
-    icon: <Building2 className="w-5 h-5 text-[#2954F5]" />,
-  },
+export const CLIENT_LOGOS: ClientLogoItem[] = [
+  { name: "The Westin Dhaka", src: "/img/the-westin.jpeg", theme: "blue" },
+  { name: "InterContinental Hotels & Resorts", src: "/img/intercontinental.jpeg", theme: "red" },
+  { name: "Pan Pacific Sonargaon Dhaka", src: "/img/pan-pacific.jpeg", theme: "blue" },
+  { name: "Chef's Canvas", src: "/img/chefs-canvas.jpeg", theme: "red" },
+  { name: "Mughal Mahal", src: "/img/mughal-mahal.jpeg", theme: "blue" },
+  { name: "Kyoto Japanese & Korean Cuisine", src: "/img/kyoto.jpeg", theme: "red" },
+  { name: "Taste of Adana", src: "/img/taste-of-adana.jpeg", theme: "blue" },
+  { name: "SomBoon The King of Taste", src: "/img/somboon.jpeg", theme: "red" },
+  { name: "Eat & Play", src: "/img/eat-and-play.jpeg", theme: "blue" },
+  { name: "Crepe E Waffle", src: "/img/crepe-e-waffle.jpeg", theme: "red" },
+  { name: "Pistrina Bakery & Pastry", src: "/img/pistrina.jpeg", theme: "blue" },
 ];
 
 export default function ClientLogosGrid() {
-  const line1 = CLIENT_BRANDS.slice(0, 4);
-  const line2 = CLIENT_BRANDS.slice(4, 8);
-
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-2.5 sm:space-y-4">
-      {/* Line 1 (4 Brands) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-        {line1.map((client, idx) => (
-          <div
-            key={idx}
-            className="flex items-center gap-2 sm:gap-3.5 p-2.5 sm:p-4 rounded-xl border border-[#E3E5EC] bg-[#FDFDFC] hover:border-[#12151B] hover:shadow-xs transition-all duration-200 group cursor-default"
-          >
-            <div className="p-1.5 sm:p-2.5 rounded-lg bg-[#F4F5F8] border border-[#E3E5EC] group-hover:scale-105 group-hover:bg-[#12151B] group-hover:text-white transition-all shrink-0">
-              {client.icon}
-            </div>
-            <div className="min-w-0">
-              <div className="font-display font-bold text-xs sm:text-sm text-[#12151B] tracking-tight group-hover:text-[#2954F5] transition-colors truncate">
-                {client.name}
-              </div>
-              <div className="text-[10px] sm:text-[11px] font-medium text-[#5B5F6B] truncate">
-                {client.category} · {client.location}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3.5 lg:gap-5">
+      {CLIENT_LOGOS.map((brand, idx) => {
+        const hoverBorder =
+          brand.theme === "red"
+            ? "hover:border-[#E51F25]"
+            : "hover:border-[#2954F5]";
+        const hoverShadow =
+          brand.theme === "red"
+            ? "hover:shadow-[0_12px_28px_-8px_rgba(229,31,37,0.18)]"
+            : "hover:shadow-[0_12px_28px_-8px_rgba(41,84,245,0.18)]";
 
-      {/* Line 2 (4 Brands) */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
-        {line2.map((client, idx) => (
+        return (
           <div
             key={idx}
-            className="flex items-center gap-2 sm:gap-3.5 p-2.5 sm:p-4 rounded-xl border border-[#E3E5EC] bg-[#FDFDFC] hover:border-[#12151B] hover:shadow-xs transition-all duration-200 group cursor-default"
+            className={`w-full bg-white rounded-lg sm:rounded-xl md:rounded-2xl border border-[#E3E5EC] p-2 sm:p-3.5 lg:p-5 flex items-center justify-center aspect-square shadow-xs ${hoverBorder} ${hoverShadow} hover:-translate-y-0.5 sm:hover:-translate-y-1 transition-all duration-300 group cursor-pointer overflow-hidden`}
           >
-            <div className="p-1.5 sm:p-2.5 rounded-lg bg-[#F4F5F8] border border-[#E3E5EC] group-hover:scale-105 group-hover:bg-[#12151B] group-hover:text-white transition-all shrink-0">
-              {client.icon}
-            </div>
-            <div className="min-w-0">
-              <div className="font-display font-bold text-xs sm:text-sm text-[#12151B] tracking-tight group-hover:text-[#2954F5] transition-colors truncate">
-                {client.name}
-              </div>
-              <div className="text-[10px] sm:text-[11px] font-medium text-[#5B5F6B] truncate">
-                {client.category} · {client.location}
-              </div>
-            </div>
+            <img
+              src={brand.src}
+              alt={brand.name}
+              className="max-h-7 sm:max-h-10 md:max-h-12 lg:max-h-16 w-auto max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+            />
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }

@@ -8,11 +8,15 @@ import ClientLogosGrid from "@/components/ClientLogos";
 import {
   ArrowRight,
   ArrowUpRight,
-  Megaphone,
+  TrendingUp,
+  Share2,
   PenTool,
-  Film,
-  Package,
+  Layout,
   Compass,
+  Search,
+  Target,
+  Palette,
+  Rocket,
 } from "lucide-react";
 
 export const metadata = {
@@ -21,13 +25,89 @@ export const metadata = {
     "Full-service branding, digital marketing, creative content, packaging, and strategy agency in Dhaka, Bangladesh.",
 };
 
-const serviceIconMap: Record<string, React.ReactNode> = {
-  digital: <Megaphone className="w-4 h-4 text-[#2954F5] group-hover:text-white transition-colors" />,
-  branding: <PenTool className="w-4 h-4 text-[#E51F25] group-hover:text-white transition-colors" />,
-  creative: <Film className="w-4 h-4 text-[#2954F5] group-hover:text-white transition-colors" />,
-  packaging: <Package className="w-4 h-4 text-[#E51F25] group-hover:text-white transition-colors" />,
-  strategy: <Compass className="w-4 h-4 text-[#2954F5] group-hover:text-white transition-colors" />,
+const serviceCardStyles: Record<
+  string,
+  {
+    icon: React.ReactNode;
+    hoverBorder: string;
+    hoverText: string;
+    cornerBorder: string;
+    contactParam: string;
+    accentColor: string;
+  }
+> = {
+  digital: {
+    icon: <TrendingUp className="w-8 h-8 sm:w-9 sm:h-9 text-[#E51F25] stroke-[1.75]" />,
+    hoverBorder: "hover:border-[#E51F25]",
+    hoverText: "group-hover:text-[#E51F25]",
+    cornerBorder: "border-t-2 border-l-2 border-[#E51F25] border-r border-b border-[#212635]",
+    contactParam: "digital",
+    accentColor: "text-[#E51F25]",
+  },
+  branding: {
+    icon: <PenTool className="w-8 h-8 sm:w-9 sm:h-9 text-[#2954F5] stroke-[1.75]" />,
+    hoverBorder: "hover:border-[#2954F5]",
+    hoverText: "group-hover:text-[#2954F5]",
+    cornerBorder: "border border-[#212635]",
+    contactParam: "branding",
+    accentColor: "text-[#2954F5]",
+  },
+  creative: {
+    icon: <Share2 className="w-8 h-8 sm:w-9 sm:h-9 text-[#E51F25] stroke-[1.75]" />,
+    hoverBorder: "hover:border-[#E51F25]",
+    hoverText: "group-hover:text-[#E51F25]",
+    cornerBorder: "border border-[#212635]",
+    contactParam: "creative",
+    accentColor: "text-[#E51F25]",
+  },
+  packaging: {
+    icon: <Layout className="w-8 h-8 sm:w-9 sm:h-9 text-[#2954F5] stroke-[1.75]" />,
+    hoverBorder: "hover:border-[#2954F5]",
+    hoverText: "group-hover:text-[#2954F5]",
+    cornerBorder: "border border-[#212635]",
+    contactParam: "packaging",
+    accentColor: "text-[#2954F5]",
+  },
+  strategy: {
+    icon: <Compass className="w-8 h-8 sm:w-9 sm:h-9 text-[#E51F25] stroke-[1.75]" />,
+    hoverBorder: "hover:border-[#E51F25]",
+    hoverText: "group-hover:text-[#E51F25]",
+    cornerBorder: "border-r-2 border-b-2 border-[#E51F25] border-t border-l border-[#212635]",
+    contactParam: "strategy",
+    accentColor: "text-[#E51F25]",
+  },
 };
+
+const workStepConfig = [
+  {
+    icon: <Search className="w-5 h-5 sm:w-6 sm:h-6" />,
+    bgClass: "bg-[#2954F5]/10 text-[#2954F5] border-[#2954F5]/25",
+    hoverBorder: "hover:border-[#2954F5]",
+    textHover: "group-hover:text-[#2954F5]",
+    taglineClass: "text-[#2954F5]",
+  },
+  {
+    icon: <Target className="w-5 h-5 sm:w-6 sm:h-6" />,
+    bgClass: "bg-[#E51F25]/10 text-[#E51F25] border-[#E51F25]/25",
+    hoverBorder: "hover:border-[#E51F25]",
+    textHover: "group-hover:text-[#E51F25]",
+    taglineClass: "text-[#E51F25]",
+  },
+  {
+    icon: <Palette className="w-5 h-5 sm:w-6 sm:h-6" />,
+    bgClass: "bg-[#2954F5]/10 text-[#2954F5] border-[#2954F5]/25",
+    hoverBorder: "hover:border-[#2954F5]",
+    textHover: "group-hover:text-[#2954F5]",
+    taglineClass: "text-[#2954F5]",
+  },
+  {
+    icon: <Rocket className="w-5 h-5 sm:w-6 sm:h-6" />,
+    bgClass: "bg-[#E51F25]/10 text-[#E51F25] border-[#E51F25]/25",
+    hoverBorder: "hover:border-[#E51F25]",
+    textHover: "group-hover:text-[#E51F25]",
+    taglineClass: "text-[#E51F25]",
+  },
+];
 
 export default function HomePage() {
   return (
@@ -80,140 +160,169 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ========================================================
-          3. OUR SERVICES (SINGLE-LINE SLEEK ROWS - LOW HEIGHT)
+      <div>
+        {/* ========================================================
+          3. HOW WE WORK (FULL-WIDTH BACKGROUND, ZERO GAP AFTER SERVICES)
       ======================================================== */}
-      <section id="services" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-1.5 sm:gap-3 pb-2.5 sm:pb-3 border-b border-[#12151B]">
-          <div>
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#12151B] tracking-tight">
-              Our Services
-            </h2>
-            <p className="mt-0.5 text-[11px] sm:text-xs md:text-sm text-[#5B5F6B]">
-              Five specialized disciplines purpose-built for market impact and revenue growth.
-            </p>
-          </div>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#12151B] hover:text-[#2954F5] transition-colors self-start sm:self-auto"
-          >
-            <span>Request a Custom Quote</span>
-            <ArrowUpRight className="w-3.5 h-3.5 text-[#2954F5]" />
-          </Link>
-        </div>
+        <section id="how-we-work" className="relative w-full bg-[#F4F5F8] border-b border-[#E3E5EC] py-12 sm:py-16 md:py-20 !mt-0 scroll-mt-20">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 pb-4 sm:pb-8 border-b border-[#E3E5EC]">
+              <div>
+                <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-[#12151B] tracking-tight">
+                  How We Work
+                </h2>
+                <p className="mt-1 text-xs sm:text-base text-[#5B5F6B] max-w-xl">
+                  Small enough to stay close to every brief, structured enough to execute it end to end.
+                </p>
+              </div>
+              <Link
+                href="/how-we-work"
+                className="inline-flex items-center gap-1.5 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#12151B] text-white text-xs sm:text-sm font-semibold hover:bg-[#2954F5] transition-colors self-start md:self-auto"
+              >
+                <span>Explore Full Methodology</span>
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              </Link>
+            </div>
 
-        {/* Single-Line Row List */}
-        <div className="divide-y divide-[#E3E5EC] border-b border-[#E3E5EC]">
-          {AGENCY_SERVICES.map((service, index) => (
-            <Link
-              key={service.id}
-              href={`/contact?service=${service.id}`}
-              className="group py-3 sm:py-4 flex items-center justify-between gap-2.5 sm:gap-6 hover:bg-[#F8F9FB] px-2 sm:px-4 -mx-2 sm:-mx-4 rounded-xl transition-all duration-150"
-            >
-              {/* Left: Number, Icon & Service Name + Subtitle (compact row) */}
-              <div className="flex items-center gap-2.5 sm:gap-4 min-w-0 flex-1">
-                <span className="font-mono text-xs sm:text-sm font-semibold text-[#5B5F6B] group-hover:text-[#2954F5] transition-colors w-5 sm:w-7 shrink-0">
-                  0{index + 1}.
-                </span>
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-[#F4F5F8] border border-[#E3E5EC] flex items-center justify-center shrink-0 group-hover:bg-[#12151B] group-hover:border-[#12151B] transition-all duration-200">
-                  {serviceIconMap[service.id]}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-col md:flex-row md:items-baseline md:gap-4">
-                    <h3 className="text-xs sm:text-base md:text-lg font-bold text-[#12151B] group-hover:text-[#2954F5] transition-colors tracking-tight truncate">
-                      {service.name}
-                    </h3>
-                    <p className="text-[10px] sm:text-xs md:text-sm text-[#5B5F6B] font-normal truncate mt-0.5 md:mt-0">
-                      {service.shortDesc}
-                    </p>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 mt-5 sm:mt-10">
+              {WORK_STEPS.map((step, idx) => {
+                const config = workStepConfig[idx] || workStepConfig[0];
+                return (
+                  <div
+                    key={step.step}
+                    className={`bg-white p-4 sm:p-7 rounded-xl sm:rounded-2xl border border-[#E3E5EC] flex flex-col items-center justify-between text-center ${config.hoverBorder} hover:shadow-lg transition-all duration-300 group`}
+                  >
+                    <div className="w-full flex flex-col items-center">
+                      {/* Centered Icon with Branding Colors */}
+                      <div className="mb-2.5 sm:mb-4 flex items-center justify-center">
+                        <div
+                          className={`w-11 h-11 sm:w-14 sm:h-14 rounded-2xl border ${config.bgClass} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-xs`}
+                        >
+                          {config.icon}
+                        </div>
+                      </div>
+
+                      <h3 className={`text-xs sm:text-lg font-bold text-[#12151B] mb-1 sm:mb-2 ${config.textHover} transition-colors tracking-tight`}>
+                        {step.title}
+                      </h3>
+                      <p className="text-[10px] sm:text-xs text-[#5B5F6B] leading-relaxed line-clamp-3 sm:line-clamp-none">
+                        {step.desc}
+                      </p>
+                    </div>
+                    <div className="mt-3 sm:mt-6 pt-2 sm:pt-4 border-t border-[#F4F5F8] w-full">
+                      <span className={`text-[9px] sm:text-xs font-semibold ${config.taglineClass} truncate block`}>
+                        {step.tagline}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
 
-              {/* Right: Action Arrow */}
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-xs font-semibold text-[#5B5F6B] group-hover:text-[#12151B] transition-colors hidden lg:inline">
-                  Inquire
-                </span>
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white border border-[#E3E5EC] flex items-center justify-center group-hover:bg-[#2954F5] group-hover:border-[#2954F5] transition-all">
-                  <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#12151B] group-hover:text-white transition-colors" />
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ========================================================
-          4. HOW WE WORK (COMPACT MOBILE 2x2 GRID)
+        {/* ========================================================
+          4. OUR SERVICES (FULL-WIDTH DARK BACKGROUND & BRAND ACCENTS)
       ======================================================== */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#F4F5F8] border border-[#E3E5EC] rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-14">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 pb-4 sm:pb-8 border-b border-[#E3E5EC]">
-            <div>
-              <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-[#12151B] tracking-tight">
-                How We Work
-              </h2>
-              <p className="mt-1 text-xs sm:text-base text-[#5B5F6B] max-w-xl">
-                Small enough to stay close to every brief, structured enough to execute it end to end.
+        <section id="services" className="relative w-full bg-[#0B0D14] border-y border-[#1C202B] py-12 sm:py-16 md:py-20 overflow-hidden scroll-mt-20">
+          {/* Subtle Ambient Brand Glows across full section width */}
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#2954F5]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#E51F25]/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl h-80 bg-gradient-to-r from-[#2954F5]/8 via-transparent to-[#E51F25]/8 blur-3xl pointer-events-none" />
+
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            {/* Section Header */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-4 pb-3 sm:pb-5 border-b border-[#1E2330]">
+              <div>
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
+                  Our Services
+                </h2>
+                <p className="mt-1 text-xs sm:text-sm text-[#9CA3AF]">
+                  Five specialized disciplines purpose-built for market impact and revenue growth.
+                </p>
+              </div>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white hover:text-[#E51F25] transition-colors self-start sm:self-auto"
+              >
+                <span>Request a Custom Quote</span>
+                <ArrowUpRight className="w-4 h-4 text-[#E51F25]" />
+              </Link>
+            </div>
+
+            {/* Centered Symmetrical Layout - 2 per row on mobile, 3 per row on desktop */}
+            <div className="flex flex-wrap justify-center gap-2.5 sm:gap-4 md:gap-5 mt-5 sm:mt-8">
+              {AGENCY_SERVICES.map((service) => {
+                const style = serviceCardStyles[service.id] || serviceCardStyles.digital;
+
+                return (
+                  <Link
+                    key={service.id}
+                    href={`/contact?service=${style.contactParam}`}
+                    className={`w-[calc((100%-0.625rem)/2)] sm:w-[calc((100%-1rem)/2)] md:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)] h-[215px] sm:h-[245px] md:h-[265px] bg-[#141721] p-3.5 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl ${style.cornerBorder} flex flex-col justify-between ${style.hoverBorder} hover:bg-[#181C28] transition-all duration-300 group shrink-0`}
+                  >
+                    {/* Top: Stroke Icon, Title, Subtitle, Description */}
+                    <div className="min-w-0">
+                      {/* Line Art Stroke Icon */}
+                      <div className="mb-1.5 sm:mb-2 md:mb-2.5 group-hover:scale-105 transition-transform duration-300">
+                        {style.icon}
+                      </div>
+
+                      {/* Title */}
+                      <h3 className="text-white font-bold text-xs sm:text-base md:text-lg tracking-tight mb-0.5 sm:mb-1 group-hover:text-white transition-colors truncate">
+                        {service.name}
+                      </h3>
+
+                      {/* Subtitle / Disciplines */}
+                      <p className={`text-[10px] sm:text-xs font-semibold ${style.accentColor} mb-1 sm:mb-2 leading-tight truncate`}>
+                        {service.shortDesc}
+                      </p>
+
+                      {/* Description */}
+                      <p className="text-[#9CA3AF] text-[11px] sm:text-xs md:text-[13px] leading-relaxed line-clamp-2 sm:line-clamp-3">
+                        {service.description}
+                      </p>
+                    </div>
+
+                    {/* Bottom: SERVICE DETAILS > */}
+                    <div className="pt-1.5 sm:pt-2 mt-auto border-t border-[#1C202E]">
+                      <span className={`text-[9px] sm:text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-white ${style.hoverText} transition-colors inline-flex items-center gap-1`}>
+                        <span>SERVICE DETAILS</span>
+                        <span className="text-[10px] sm:text-xs transition-transform duration-200 group-hover:translate-x-1">&gt;</span>
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+
+
+        {/* ========================================================
+          5. BRANDS WE WORK WITH (PREMIUM EDITORIAL SHOWCASE)
+      ======================================================== */}
+        <section className="relative w-full bg-[#FAFAFC] border-b border-[#E3E5EC] py-12 sm:py-16 md:py-20 overflow-hidden">
+          {/* Subtle Ambient Brand Glows */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#2954F5]/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#E51F25]/5 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-1.5 pb-3 sm:pb-5 border-b border-[#E3E5EC] mb-6 sm:mb-10">
+              <div>
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#12151B] tracking-tight">
+                  Brands We Work With
+                </h2>
+              </div>
+              <p className="text-[11px] sm:text-sm text-[#5B5F6B]">
+                Trusted by Bangladesh&apos;s premier hospitality destinations, culinary icons &amp; enterprises
               </p>
             </div>
-            <Link
-              href="/how-we-work"
-              className="inline-flex items-center gap-1.5 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#12151B] text-white text-xs sm:text-sm font-semibold hover:bg-[#2954F5] transition-colors self-start md:self-auto"
-            >
-              <span>Explore Full Methodology</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </Link>
+            <ClientLogosGrid />
           </div>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 mt-4 sm:mt-10">
-            {WORK_STEPS.map((step) => (
-              <div
-                key={step.step}
-                className="bg-white p-3.5 sm:p-7 rounded-xl sm:rounded-2xl border border-[#E3E5EC] flex flex-col justify-between hover:border-[#12151B] hover:shadow-md transition-all"
-              >
-                <div>
-                  <span className="font-mono text-base sm:text-3xl font-bold text-[#12151B] block mb-1 sm:mb-3">
-                    {step.step}
-                  </span>
-                  <h3 className="text-xs sm:text-xl font-bold text-[#12151B] mb-1 sm:mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-[10px] sm:text-xs text-[#5B5F6B] leading-relaxed line-clamp-3 sm:line-clamp-none">
-                    {step.desc}
-                  </p>
-                </div>
-                <div className="mt-3 sm:mt-6 pt-2 sm:pt-4 border-t border-[#F4F5F8]">
-                  <span className="text-[9px] sm:text-xs font-semibold text-[#2954F5] truncate block">
-                    {step.tagline}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================
-          5. BRANDS WE WORK WITH (STATIC 2-ROW GRID)
-      ======================================================== */}
-      <section className="space-y-4 sm:space-y-6">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-1.5 pb-2.5 sm:pb-3 border-b border-[#E3E5EC]">
-            <div>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#12151B] tracking-tight">
-                Brands We Work With
-              </h2>
-            </div>
-            <p className="text-[11px] sm:text-sm text-[#5B5F6B]">
-              National &amp; regional enterprises across Bangladesh
-            </p>
-          </div>
-        </div>
-
-        <ClientLogosGrid />
-      </section>
+        </section>
+      </div>
 
       {/* ========================================================
           6. INQUIRY CALL-TO-ACTION (COMPACT & CRISP)
