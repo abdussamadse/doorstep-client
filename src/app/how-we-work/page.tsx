@@ -174,24 +174,36 @@ export default function HowWeWorkPage() {
       </section>
 
       {/* ========================================================
-          5. CALL TO ACTION (DIRECT HEADING - ZERO BADGES)
+          5. CALL TO ACTION (BRAND BLUE & RED CTA)
       ======================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#12151B] text-white rounded-3xl p-8 sm:p-12 text-center space-y-6">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
-            Have a brief you’d like to discuss?
-          </h2>
-          <p className="text-gray-300 text-base max-w-xl mx-auto leading-relaxed font-normal">
-            Tell us about your brand challenge. We will review your goals and walk you through a tailored roadmap.
-          </p>
-          <div className="pt-2">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#2954F5] text-white font-medium hover:bg-[#1B3BC9] transition-all transform hover:-translate-y-0.5"
-            >
-              <span>Schedule a Discovery Call</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+        <div className="bg-[#1E42D0] text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 lg:p-16 relative overflow-hidden shadow-2xl border border-blue-400/30">
+          {/* Subtle Ambient Brand Glows */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-black/25 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 max-w-2xl space-y-3 sm:space-y-6">
+            <h2 className="text-xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-snug text-white font-display">
+              Have a brief you’d like to discuss?
+            </h2>
+            <p className="text-blue-100 text-xs sm:text-base leading-relaxed font-normal">
+              Tell us about your brand challenge. We will review your goals and walk you through a tailored roadmap.
+            </p>
+            <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-4">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-4 rounded-full bg-[#E51F25] text-white font-bold text-xs sm:text-base hover:bg-[#C9181E] transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-red-500/25"
+              >
+                <span>Schedule a Discovery Call</span>
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+              </Link>
+              <a
+                href="tel:+8801785031126"
+                className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-4 rounded-full border border-white/40 text-white font-medium text-xs sm:text-base hover:bg-white/15 transition-colors backdrop-blur-xs"
+              >
+                <span>+880 1785-031126</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>

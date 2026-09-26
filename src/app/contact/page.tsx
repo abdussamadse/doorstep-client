@@ -52,9 +52,9 @@ export default function ContactPage() {
               href="https://maps.google.com/?q=Kolabagan,Dhaka,Bangladesh"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-[#E3E5EC] text-sm font-semibold text-[#12151B] hover:border-[#12151B] transition-colors self-start md:self-auto"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#2954F5] text-white text-sm font-semibold hover:bg-[#1B3BC9] transition-all transform hover:-translate-y-0.5 shadow-sm self-start md:self-auto"
             >
-              <Navigation className="w-4 h-4 text-[#2954F5]" />
+              <Navigation className="w-4 h-4 text-white" />
               <span>Open in Google Maps</span>
             </a>
           </div>

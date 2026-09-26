@@ -358,7 +358,7 @@ export default function ContactClient() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#12151B] text-white font-medium text-sm hover:bg-[#2954F5] transition-all disabled:opacity-50 cursor-pointer shadow-xs hover:shadow-md"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#E51F25] text-white font-bold text-sm hover:bg-[#C9181E] transition-all transform hover:-translate-y-0.5 disabled:opacity-50 cursor-pointer shadow-lg hover:shadow-red-500/25"
             >
               {loading ? (
                 <span>Submitting Brief...</span>

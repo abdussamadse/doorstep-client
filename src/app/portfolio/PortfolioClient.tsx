@@ -34,8 +34,8 @@ export default function PortfolioClient() {
               onClick={() => setActiveCategory(cat)}
               className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
                 isActive
-                  ? "bg-[#12151B] text-white"
-                  : "bg-white text-[#5B5F6B] border border-[#E3E5EC] hover:text-[#12151B] hover:border-gray-400"
+                  ? "bg-[#2954F5] text-white shadow-sm"
+                  : "bg-white text-[#5B5F6B] border border-[#E3E5EC] hover:text-[#2954F5] hover:border-[#2954F5]"
               }`}
             >
               {cat}
@@ -190,7 +190,7 @@ export default function PortfolioClient() {
                 </span>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-[#2954F5] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#1B3BC9] transition-colors"
+                  className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-[#E51F25] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#C9181E] transition-all shadow-md hover:shadow-red-500/25"
                 >
                   <span>Start Your Project</span>
                   <ArrowRight className="w-3.5 h-3.5" />

@@ -119,7 +119,7 @@ export default function HomePage() {
               </div>
               <Link
                 href="/how-we-work"
-                className="inline-flex items-center gap-1.5 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#12151B] text-white text-xs sm:text-sm font-semibold hover:bg-[#2954F5] transition-colors self-start md:self-auto"
+                className="inline-flex items-center gap-1.5 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#2954F5] text-white text-xs sm:text-sm font-semibold hover:bg-[#1B3BC9] transition-all transform hover:-translate-y-0.5 shadow-sm self-start md:self-auto"
               >
                 <span>Explore Full Methodology</span>
                 <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
