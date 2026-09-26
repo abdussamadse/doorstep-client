@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { TEAM_MEMBERS, AGENCY_INFO } from "@/data/agencyData";
-import { ArrowRight, Mail, Sparkles, HeartHandshake, Zap, Trophy } from "lucide-react";
+import { TEAM_MEMBERS } from "@/data/agencyData";
+import { ArrowRight, Sparkles, HeartHandshake, Zap, Trophy } from "lucide-react";
 
 export const metadata = {
   title: "Our Team — Doorstep Limited | Creative & Strategy Leadership",
@@ -50,11 +50,11 @@ export default function OurTeamPage() {
       </section>
 
       {/* ========================================================
-          2. TEAM ROSTER GRID (DIRECT HEADING - ZERO BADGES)
+          2. TEAM ROSTER GRID
       ======================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mb-12">
-          <h2 className="text-3xl font-bold text-[#12151B] tracking-tight">
+        <div className="max-w-2xl mb-10 sm:mb-14">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#12151B] tracking-tight">
             Studio Leadership &amp; Function Leads
           </h2>
           <p className="text-sm text-[#5B5F6B] mt-2">
@@ -62,44 +62,46 @@ export default function OurTeamPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
           {TEAM_MEMBERS.map((member) => (
             <div
               key={member.id}
-              className="bg-white border border-[#E3E5EC] rounded-2xl overflow-hidden hover:border-[#12151B] hover:shadow-xl transition-all duration-300 group flex flex-col justify-between"
+              className="relative aspect-[3/4.2] rounded-xl sm:rounded-2xl overflow-hidden bg-[#141722] border border-[#E3E5EC] hover:border-[#12151B] group shadow-lg hover:shadow-2xl transition-all duration-300"
             >
-              <div>
-                <div className="aspect-4/3 bg-gradient-to-br from-[#F4F5F8] via-[#ECEEF2] to-[#E3E5EC] flex flex-col items-center justify-center p-6 relative border-b border-[#E3E5EC]">
-                  <div className="w-20 h-20 rounded-2xl bg-white border border-[#E3E5EC] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform duration-300">
-                    <span className="font-display font-bold text-2xl text-[#12151B]">
-                      {member.initials}
-                    </span>
-                  </div>
-                  <span className="text-xs font-bold text-[#5B5F6B] mt-4">
-                    {member.dept}
-                  </span>
-                </div>
+              {/* Photo */}
+              <img
+                src={member.image}
+                alt={member.name}
+                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+              />
 
-                <div className="p-8 space-y-3">
-                  <div className="space-y-1">
-                    <h3 className="text-2xl font-bold text-[#12151B] group-hover:text-[#2954F5] transition-colors tracking-tight">
-                      {member.role}
-                    </h3>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-[#2954F5]">
-                      {member.specialty}
-                    </p>
-                  </div>
-                  <p className="text-sm text-[#5B5F6B] leading-relaxed pt-2">
-                    {member.bio}
-                  </p>
-                </div>
-              </div>
+              {/* Dark Vignette / Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent pointer-events-none" />
 
-              <div className="px-8 py-4 bg-[#F4F5F8]/60 border-t border-[#E3E5EC] flex items-center justify-between text-xs text-[#5B5F6B]">
-                <span className="font-medium text-[#12151B]">
-                  Dhaka Creative Studio
-                </span>
-                <span className="font-mono text-gray-400">Full-Time</span>
+              {/* Overlay Information */}
+              <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 z-10 space-y-1">
+                <h3 className="text-white font-bold text-base sm:text-lg lg:text-xl tracking-tight leading-snug font-display">
+                  {member.name}
+                </h3>
+                <p className="text-gray-300 text-xs sm:text-sm font-normal">
+                  {member.role}
+                </p>
+
+                {/* LinkedIn Icon Badge matching screenshot */}
+                <div className="pt-2">
+                  <a
+                    href={member.linkedin || "https://linkedin.com"}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${member.name} on LinkedIn`}
+                    className="inline-flex items-center justify-center w-6 h-6 rounded bg-[#1C1F28] hover:bg-[#E51F25] text-[#E51F25] hover:text-white transition-all duration-200 border border-white/10"
+                  >
+                    <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
+                      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.45 1.45 0 0 0 0-2.9 1.45 1.45 0 0 0 0 2.9m1.4 9.74v-8.37H5.06v8.37h2.8z" />
+                    </svg>
+                  </a>
+                </div>
               </div>
             </div>
           ))}
@@ -134,29 +136,6 @@ export default function OurTeamPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ========================================================
-          4. CAREERS CALLOUT (DIRECT HEADING - ZERO BADGES)
-      ======================================================== */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="border border-[#E3E5EC] rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 bg-white hover:border-[#12151B] hover:shadow-lg transition-all">
-          <div className="space-y-3 max-w-xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#12151B] tracking-tight">
-              Want to build remarkable brands with us?
-            </h2>
-            <p className="text-sm text-[#5B5F6B] leading-relaxed">
-              We are continually looking for passionate art directors, motion designers, copywriters, and paid media strategists based in Dhaka.
-            </p>
-          </div>
-          <a
-            href={`mailto:${AGENCY_INFO.email}?subject=Career%20Application%20at%20Doorstep%20Limited`}
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#2954F5] text-white text-sm font-semibold hover:bg-[#1B3BC9] transition-colors shrink-0 shadow-sm"
-          >
-            <Mail className="w-4 h-4" />
-            <span>Send Your Portfolio</span>
-          </a>
         </div>
       </section>
 

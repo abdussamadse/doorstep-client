@@ -25,12 +25,14 @@ export interface CaseStudy {
 
 export interface TeamMember {
   id: string;
-  initials: string;
-  role: string;
   name: string;
-  dept: string;
-  specialty: string;
-  bio: string;
+  role: string;
+  image?: string;
+  linkedin?: string;
+  initials?: string;
+  dept?: string;
+  specialty?: string;
+  bio?: string;
 }
 
 export interface WorkStep {
@@ -216,58 +218,44 @@ export const PORTFOLIO_ITEMS: CaseStudy[] = [
 
 export const TEAM_MEMBERS: TeamMember[] = [
   {
-    id: "md",
-    initials: "MD",
-    role: "Managing Director",
-    name: "Strategy & Accounts Lead",
-    dept: "Executive Leadership",
-    specialty: "Brand Positioning & Client Strategy",
-    bio: "Guiding brand vision, strategic commercial growth, and key account partnerships from inception through nationwide execution.",
+    id: "hasan",
+    name: "Mohammad Mahamudul Hasan",
+    role: "Head of Operations",
+    image: "/img/team/mohammad-mahamudul-hasan.png",
+    linkedin: "https://linkedin.com",
+    dept: "Operations Leadership",
+    specialty: "Studio & Project Operations",
+    bio: "Leading day-to-day agency operations, process excellence, and cross-functional project delivery with utmost discipline.",
   },
   {
-    id: "cd",
-    initials: "CD",
+    id: "souvik",
+    name: "Souvik Bose",
+    role: "Senior Account Manager",
+    image: "/img/team/souvik-bose.png",
+    linkedin: "https://linkedin.com",
+    dept: "Client Strategy & Accounts",
+    specialty: "Key Account Management",
+    bio: "Managing major brand partnerships, commercial growth roadmaps, and seamless client communication across all campaigns.",
+  },
+  {
+    id: "sheejon",
+    name: "Sheejon Anam",
     role: "Creative Director",
-    name: "Art Direction & Brand Identity",
-    dept: "Design & Creative",
-    specialty: "Visual Systems & Typography",
-    bio: "Obsessed with clean aesthetics, grid discipline, and conceptual typography that imbues every brand with soul.",
+    image: "/img/team/sheejon-anam.png",
+    linkedin: "https://linkedin.com",
+    dept: "Creative Direction & Design",
+    specialty: "Brand Identity & Art Direction",
+    bio: "Spearheading creative visual direction, conceptual brand identities, and high-impact digital storytelling for leading brands.",
   },
   {
-    id: "mm",
-    initials: "MM",
-    role: "Marketing Manager",
-    name: "Growth & Performance Media",
-    dept: "Performance Marketing",
-    specialty: "Paid Ads & Data Optimization",
-    bio: "Data-driven media buyer balancing creative hooks with programmatic audience targeting to maximize marketing ROI.",
-  },
-  {
-    id: "cs",
-    initials: "CS",
-    role: "Content Strategist",
-    name: "Editorial & Social Planning",
-    dept: "Content & Copy",
-    specialty: "Narrative Voice & Calendars",
-    bio: "Crafting sticky copy, engaging hooks, and cultural storytelling that resonates across Dhaka and regional audiences.",
-  },
-  {
-    id: "mg",
-    initials: "MG",
-    role: "Motion Designer",
-    name: "Video & Dynamic Graphics",
-    dept: "Multimedia",
-    specialty: "Reels, Animation & Showreels",
-    bio: "Bringing static layouts to life through kinetic typography, 3D product transitions, and punchy short-form video edits.",
-  },
-  {
-    id: "am",
-    initials: "AM",
-    role: "Account Manager",
-    name: "Client Success & Delivery",
-    dept: "Operations",
-    specialty: "Workflow & Project Delivery",
-    bio: "The reliable bridge between client briefs and studio production, ensuring on-time delivery without friction.",
+    id: "ariful",
+    name: "Ariful Islam",
+    role: "Client Service Executive",
+    image: "/img/team/ariful-islam.png",
+    linkedin: "https://linkedin.com",
+    dept: "Client Servicing",
+    specialty: "Campaign Execution & Coordination",
+    bio: "Ensuring smooth brief turnaround, day-to-day client engagement, and coordinated delivery between clients and creative teams.",
   },
 ];
 
