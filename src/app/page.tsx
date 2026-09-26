@@ -184,10 +184,10 @@ export default function HomePage() {
               </div>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-white text-[#1E42D0] hover:bg-blue-50 font-bold text-xs uppercase tracking-wider transition-all shadow-md self-start sm:self-auto hover:-translate-y-0.5"
+                className="inline-flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-[#E51F25] text-white hover:bg-[#C9181E] font-bold text-xs uppercase tracking-wider transition-all shadow-md hover:shadow-red-500/25 self-start sm:self-auto hover:-translate-y-0.5"
               >
                 <span>Request a Custom Quote</span>
-                <ArrowUpRight className="w-4 h-4 text-[#1E42D0]" />
+                <ArrowUpRight className="w-4 h-4 text-white" />
               </Link>
             </div>
 
