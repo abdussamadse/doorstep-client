@@ -6,6 +6,7 @@ export interface ServiceItem {
   tags: string[];
   deliverables: string[];
   icon: string;
+  image?: string;
 }
 
 export interface CaseStudy {
@@ -45,47 +46,52 @@ export const AGENCY_SERVICES: ServiceItem[] = [
   {
     id: "digital",
     name: "Digital Marketing",
-    shortDesc: "Social Media, Content, Advertising & Campaigns",
+    shortDesc: "Social Media, Content",
     description: "Our strategic campaigns harness the power of data-driven insights and mad creativity to boost your online visibility and drive targeted traffic.",
     tags: ["Social Media", "Content", "Advertising", "Campaigns"],
     deliverables: ["Monthly Content Calendars", "Ad Copy & Creative Variations", "Audience Retargeting", "Performance Analytics"],
     icon: "TrendingUp",
+    image: "/img/services/digital-marketing.jpg",
   },
   {
     id: "branding",
     name: "Brand Identity",
-    shortDesc: "Logo, Visual Identity, Guidelines & Corporate Branding",
+    shortDesc: "Logo, Visual Identity, Guidelines",
     description: "Our team builds and refines your brand's identity starting from a logo that grabs all the attentions to communication that lives in the audience's head rent free.",
     tags: ["Logo", "Visual Identity", "Guidelines", "Corporate Branding"],
     deliverables: ["Comprehensive Brand Book", "Vector Logo Systems", "Stationery & Collateral", "Tone of Voice Guide"],
     icon: "PenTool",
+    image: "/img/services/brand-identity.jpg",
   },
   {
     id: "creative",
     name: "Creative & Content",
-    shortDesc: "Design, Reels, Motion Graphics & Video Content",
+    shortDesc: "Design, Reels, Motion Graphics",
     description: "We create captivating, high-impact reels, motion graphics and creative visual stories that grab attention and make your brand memorable in a crowded digital space.",
     tags: ["Design", "Reels", "Motion Graphics", "Video Content"],
     deliverables: ["Social Reel Sequences", "Display Advertising", "Campaign Visual Direction", "Custom Motion Assets"],
     icon: "Share2",
+    image: "/img/services/creative-content.jpg",
   },
   {
     id: "packaging",
     name: "Packaging & Print",
-    shortDesc: "Packaging, Menus, Signage & Print Materials",
+    shortDesc: "Packaging, Menus, Signage",
     description: "We design bold, shelf-ready packaging, restaurant menus, environmental signage, and print materials that capture attention and reinforce your presence in the physical world.",
     tags: ["Packaging", "Menus", "Signage", "Print Materials"],
     deliverables: ["Print-Ready Die-lines", "Retail Box & Label Design", "Environmental Signage", "Restaurant Menus"],
     icon: "Layout",
+    image: "/img/services/packaging-print.jpg",
   },
   {
     id: "strategy",
     name: "Marketing Solutions",
-    shortDesc: "Strategy, Campaigns, Activation & Consultancy",
+    shortDesc: "Strategy, Campaigns",
     description: "Data-informed strategic roadmaps, high-converting activation campaigns, and executive consultancy ensuring creative investments align directly with business revenue.",
     tags: ["Strategy", "Campaigns", "Activation", "Consultancy"],
     deliverables: ["GTM Action Plans", "Competitor Matrix", "Target Audience Personas", "Annual Marketing Roadmaps"],
     icon: "Compass",
+    image: "/img/services/marketing-solutions.jpg",
   },
 ];
 
@@ -93,7 +99,7 @@ export const WORK_STEPS: WorkStep[] = [
   {
     step: "01",
     title: "Understand",
-    tagline: "Research first, never assumptions.",
+    tagline: "Research first",
     desc: "We start with the brand, the category, the Bangladeshi consumer landscape, and the competitive environment — not a recycled template.",
     bulletPoints: [
       "In-depth stakeholder discovery sessions",
@@ -105,7 +111,7 @@ export const WORK_STEPS: WorkStep[] = [
   {
     step: "02",
     title: "Plan",
-    tagline: "A roadmap you can actually hold us to.",
+    tagline: "A roadmap you can",
     desc: "A concrete strategic plan and milestone calendar mapped out before a single pixel or line of copy is generated.",
     bulletPoints: [
       "Core value proposition & brand positioning angle",
@@ -117,7 +123,7 @@ export const WORK_STEPS: WorkStep[] = [
   {
     step: "03",
     title: "Create",
-    tagline: "Crafted to guidelines, built to perform.",
+    tagline: "Crafted to guidelines",
     desc: "Design, copywriting, motion graphics, and print production strictly aligned with the brand aesthetic — never compromised.",
     bulletPoints: [
       "Iterative design rounds with active client involvement",
@@ -129,7 +135,7 @@ export const WORK_STEPS: WorkStep[] = [
   {
     step: "04",
     title: "Deliver & Report",
-    tagline: "Numbers that matter, delivered on time.",
+    tagline: "Numbers that matter",
     desc: "Work launches on schedule, and every monthly retainer or campaign closes with real performance metrics, not just vanity assets.",
     bulletPoints: [
       "Multi-channel scheduled deployment & launch tracking",

@@ -8,11 +8,6 @@ import ClientLogosGrid from "@/components/ClientLogos";
 import {
   ArrowRight,
   ArrowUpRight,
-  TrendingUp,
-  Share2,
-  PenTool,
-  Layout,
-  Compass,
   Search,
   Target,
   Palette,
@@ -23,59 +18,6 @@ export const metadata = {
   title: "Doorstep Limited — Marketing & Branding Agency Dhaka",
   description:
     "Full-service branding, digital marketing, creative content, packaging, and strategy agency in Dhaka, Bangladesh.",
-};
-
-const serviceCardStyles: Record<
-  string,
-  {
-    icon: React.ReactNode;
-    hoverBorder: string;
-    hoverText: string;
-    cornerBorder: string;
-    contactParam: string;
-    accentColor: string;
-  }
-> = {
-  digital: {
-    icon: <TrendingUp className="w-8 h-8 sm:w-9 sm:h-9 text-[#E51F25] stroke-[1.75]" />,
-    hoverBorder: "hover:border-[#E51F25]",
-    hoverText: "group-hover:text-[#E51F25]",
-    cornerBorder: "border-t-2 border-l-2 border-[#E51F25] border-r border-b border-[#212635]",
-    contactParam: "digital",
-    accentColor: "text-[#E51F25]",
-  },
-  branding: {
-    icon: <PenTool className="w-8 h-8 sm:w-9 sm:h-9 text-[#2954F5] stroke-[1.75]" />,
-    hoverBorder: "hover:border-[#2954F5]",
-    hoverText: "group-hover:text-[#2954F5]",
-    cornerBorder: "border border-[#212635]",
-    contactParam: "branding",
-    accentColor: "text-[#2954F5]",
-  },
-  creative: {
-    icon: <Share2 className="w-8 h-8 sm:w-9 sm:h-9 text-[#E51F25] stroke-[1.75]" />,
-    hoverBorder: "hover:border-[#E51F25]",
-    hoverText: "group-hover:text-[#E51F25]",
-    cornerBorder: "border border-[#212635]",
-    contactParam: "creative",
-    accentColor: "text-[#E51F25]",
-  },
-  packaging: {
-    icon: <Layout className="w-8 h-8 sm:w-9 sm:h-9 text-[#2954F5] stroke-[1.75]" />,
-    hoverBorder: "hover:border-[#2954F5]",
-    hoverText: "group-hover:text-[#2954F5]",
-    cornerBorder: "border border-[#212635]",
-    contactParam: "packaging",
-    accentColor: "text-[#2954F5]",
-  },
-  strategy: {
-    icon: <Compass className="w-8 h-8 sm:w-9 sm:h-9 text-[#E51F25] stroke-[1.75]" />,
-    hoverBorder: "hover:border-[#E51F25]",
-    hoverText: "group-hover:text-[#E51F25]",
-    cornerBorder: "border-r-2 border-b-2 border-[#E51F25] border-t border-l border-[#212635]",
-    contactParam: "strategy",
-    accentColor: "text-[#E51F25]",
-  },
 };
 
 const workStepConfig = [
@@ -222,74 +164,60 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================
-          4. OUR SERVICES (FULL-WIDTH DARK BACKGROUND & BRAND ACCENTS)
+          4. OUR SERVICES (BRAND BLUE BACKGROUND & IMAGE CARDS)
       ======================================================== */}
-        <section id="services" className="relative w-full bg-[#0B0D14] border-y border-[#1C202B] py-12 sm:py-16 md:py-20 overflow-hidden scroll-mt-20">
-          {/* Subtle Ambient Brand Glows across full section width */}
-          <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#2954F5]/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#E51F25]/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl h-80 bg-gradient-to-r from-[#2954F5]/8 via-transparent to-[#E51F25]/8 blur-3xl pointer-events-none" />
+        <section id="services" className="relative w-full bg-[#1E42D0] py-12 sm:py-16 md:py-20 overflow-hidden scroll-mt-20">
+          {/* Subtle Ambient Glows */}
+          <div className="absolute -top-32 -left-32 w-96 h-96 bg-white/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-black/25 rounded-full blur-3xl pointer-events-none" />
 
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             {/* Section Header */}
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-4 pb-3 sm:pb-5 border-b border-[#1E2330]">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-4 pb-3 sm:pb-5 border-b border-white/20">
               <div>
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
                   Our Services
                 </h2>
-                <p className="mt-1 text-xs sm:text-sm text-[#9CA3AF]">
+                <p className="mt-1 text-xs sm:text-sm text-blue-100">
                   Five specialized disciplines purpose-built for market impact and revenue growth.
                 </p>
               </div>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white hover:text-[#E51F25] transition-colors self-start sm:self-auto"
+                className="inline-flex items-center gap-1.5 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-white text-[#1E42D0] hover:bg-blue-50 font-bold text-xs uppercase tracking-wider transition-all shadow-md self-start sm:self-auto hover:-translate-y-0.5"
               >
                 <span>Request a Custom Quote</span>
-                <ArrowUpRight className="w-4 h-4 text-[#E51F25]" />
+                <ArrowUpRight className="w-4 h-4 text-[#1E42D0]" />
               </Link>
             </div>
 
-            {/* Centered Symmetrical Layout - 2 per row on mobile, 3 per row on desktop */}
+            {/* Symmetrical Layout - 2 per row on mobile, 3 per row on desktop */}
             <div className="flex flex-wrap justify-center gap-2.5 sm:gap-4 md:gap-5 mt-5 sm:mt-8">
               {AGENCY_SERVICES.map((service) => {
-                const style = serviceCardStyles[service.id] || serviceCardStyles.digital;
-
                 return (
                   <Link
                     key={service.id}
-                    href={`/contact?service=${style.contactParam}`}
-                    className={`w-[calc((100%-0.625rem)/2)] sm:w-[calc((100%-1rem)/2)] md:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)] h-[215px] sm:h-[245px] md:h-[265px] bg-[#141721] p-3.5 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl ${style.cornerBorder} flex flex-col justify-between ${style.hoverBorder} hover:bg-[#181C28] transition-all duration-300 group shrink-0`}
+                    href={`/contact?service=${service.id}`}
+                    className="w-[calc((100%-0.625rem)/2)] sm:w-[calc((100%-1rem)/2)] md:w-[calc((100%-1.25rem)/2)] lg:w-[calc((100%-2.5rem)/3)] bg-[#111420] rounded-xl sm:rounded-2xl border border-white/10 hover:border-white/35 overflow-hidden flex flex-col hover:-translate-y-1.5 hover:shadow-[0_20px_35px_-10px_rgba(0,0,0,0.5)] transition-all duration-300 group shrink-0"
                   >
-                    {/* Top: Stroke Icon, Title, Subtitle, Description */}
-                    <div className="min-w-0">
-                      {/* Line Art Stroke Icon */}
-                      <div className="mb-1.5 sm:mb-2 md:mb-2.5 group-hover:scale-105 transition-transform duration-300">
-                        {style.icon}
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="text-white font-bold text-xs sm:text-base md:text-lg tracking-tight mb-0.5 sm:mb-1 group-hover:text-white transition-colors truncate">
-                        {service.name}
-                      </h3>
-
-                      {/* Subtitle / Disciplines */}
-                      <p className={`text-[10px] sm:text-xs font-semibold ${style.accentColor} mb-1 sm:mb-2 leading-tight truncate`}>
-                        {service.shortDesc}
-                      </p>
-
-                      {/* Description */}
-                      <p className="text-[#9CA3AF] text-[11px] sm:text-xs md:text-[13px] leading-relaxed line-clamp-2 sm:line-clamp-3">
-                        {service.description}
-                      </p>
+                    {/* Top: Image */}
+                    <div className="w-full aspect-[4/3] sm:aspect-[16/10] overflow-hidden bg-black/40 relative">
+                      <img
+                        src={service.image}
+                        alt={service.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
                     </div>
 
-                    {/* Bottom: SERVICE DETAILS > */}
-                    <div className="pt-1.5 sm:pt-2 mt-auto border-t border-[#1C202E]">
-                      <span className={`text-[9px] sm:text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-white ${style.hoverText} transition-colors inline-flex items-center gap-1`}>
-                        <span>SERVICE DETAILS</span>
-                        <span className="text-[10px] sm:text-xs transition-transform duration-200 group-hover:translate-x-1">&gt;</span>
-                      </span>
+                    {/* Bottom: Title & Subtitle only */}
+                    <div className="p-3 sm:p-4 md:p-5 text-center flex flex-col justify-center grow">
+                      <h3 className="text-white font-bold text-xs sm:text-base md:text-lg tracking-tight group-hover:text-blue-200 transition-colors truncate">
+                        {service.name}
+                      </h3>
+                      <p className="text-[9px] sm:text-[11px] md:text-xs font-semibold text-blue-200/80 uppercase tracking-wider mt-1 truncate">
+                        {service.shortDesc}
+                      </p>
                     </div>
                   </Link>
                 );
@@ -325,28 +253,32 @@ export default function HomePage() {
       </div>
 
       {/* ========================================================
-          6. INQUIRY CALL-TO-ACTION (COMPACT & CRISP)
+          6. INQUIRY CALL-TO-ACTION (BRAND BLUE)
       ======================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#12151B] text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 lg:p-16 relative overflow-hidden">
+        <div className="bg-[#1E42D0] text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 lg:p-16 relative overflow-hidden shadow-2xl border border-blue-400/30">
+          {/* Subtle Ambient Brand Glows */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-black/25 rounded-full blur-3xl pointer-events-none" />
+
           <div className="relative z-10 max-w-2xl space-y-3 sm:space-y-6">
-            <h2 className="text-xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-snug">
+            <h2 className="text-xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-snug text-white font-display">
               Ready to take your brand from idea to shelf?
             </h2>
-            <p className="text-gray-300 text-xs sm:text-base leading-relaxed font-normal">
+            <p className="text-blue-100 text-xs sm:text-base leading-relaxed font-normal">
               Whether you need a complete corporate rebranding, high-conversion paid media, or tactile retail packaging, our senior team in Dhaka is ready.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-4">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-4 rounded-full bg-[#2954F5] text-white font-medium text-xs sm:text-base hover:bg-[#1B3BC9] transition-all transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-4 rounded-full bg-[#E51F25] text-white font-bold text-xs sm:text-base hover:bg-[#C9181E] transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-red-500/25"
               >
                 <span>Get in Touch With Us</span>
-                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
               </Link>
               <a
                 href="tel:+8801785031126"
-                className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-4 rounded-full border border-gray-700 text-white font-medium text-xs sm:text-base hover:bg-white/10 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-4 rounded-full border border-white/40 text-white font-medium text-xs sm:text-base hover:bg-white/15 transition-colors backdrop-blur-xs"
               >
                 <span>+880 1785-031126</span>
               </a>
