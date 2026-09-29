@@ -1,36 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import { TEAM_MEMBERS } from "@/data/agencyData";
-import { ArrowRight, Sparkles, HeartHandshake, Zap, Trophy } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Our Team — Doorstep Limited | Creative & Strategy Leadership",
   description:
     "Meet the experienced creative directors, brand strategists, and performance marketers behind Doorstep Limited in Dhaka.",
 };
-
-const culturePoints = [
-  {
-    title: "Senior Hands-On Execution",
-    desc: "We don't pitch with senior directors and pass the work to interns. The specialists you meet on day one are the ones drafting your strategy and designing your assets.",
-    icon: <Trophy className="w-5 h-5 text-[#2954F5]" />,
-  },
-  {
-    title: "Fast Iteration, Zero Bureaucracy",
-    desc: "Speed is a competitive advantage in modern marketing. Our flat structure allows ideas to move from concept to client review without red tape.",
-    icon: <Zap className="w-5 h-5 text-[#E51F25]" />,
-  },
-  {
-    title: "Uncompromising Visual Craft",
-    desc: "From kerning and typography to pacing in a 15-second reel, we care deeply about aesthetic details that elevate brands above competitors.",
-    icon: <Sparkles className="w-5 h-5 text-[#2954F5]" />,
-  },
-  {
-    title: "Radical Transparency",
-    desc: "Clear timelines, straightforward pricing, and honest reporting. If an ad creative underperforms, we dissect the data and optimize immediately.",
-    icon: <HeartHandshake className="w-5 h-5 text-[#E51F25]" />,
-  },
-];
 
 export default function OurTeamPage() {
   return (
@@ -109,38 +86,7 @@ export default function OurTeamPage() {
       </section>
 
       {/* ========================================================
-          3. HOW OUR TEAM OPERATES (DIRECT HEADING - ZERO BADGES)
-      ======================================================== */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#F4F5F8] border border-[#E3E5EC] rounded-3xl p-8 sm:p-12 lg:p-16">
-          <div className="max-w-xl mb-12">
-            <h2 className="text-3xl font-bold text-[#12151B] tracking-tight">
-              How We Work Together
-            </h2>
-            <p className="text-sm text-[#5B5F6B] mt-2">
-              The internal habits that keep our team synchronized and delivering peak output.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {culturePoints.map((cp, idx) => (
-              <div
-                key={idx}
-                className="bg-white p-8 rounded-2xl border border-[#E3E5EC] space-y-3 hover:border-[#12151B] hover:shadow-md transition-all"
-              >
-                <div className="p-3 bg-[#F4F5F8] rounded-xl w-fit border border-[#E3E5EC]">
-                  {cp.icon}
-                </div>
-                <h3 className="text-xl font-bold text-[#12151B]">{cp.title}</h3>
-                <p className="text-sm text-[#5B5F6B] leading-relaxed">{cp.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================
-          5. CTA (BRAND BLUE & RED CTA)
+          3. CTA (BRAND BLUE & RED CTA)
       ======================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-[#1E42D0] text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 lg:p-16 relative overflow-hidden shadow-2xl border border-blue-400/30">

@@ -1,28 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import PortfolioClient from "./PortfolioClient";
-import { ArrowRight, Quote } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Portfolio — Doorstep Limited | Case Studies & Selected Work",
   description:
     "Explore case studies in branding, packaging, digital marketing, and creative production from Doorstep Limited, Dhaka.",
 };
-
-const testimonials = [
-  {
-    quote:
-      "Doorstep Limited transformed Caffeine Coffee’s digital presence completely. Their content calendar is relentless, their reels look international, and our weekly footfall reflects the buzz.",
-    author: "Founder & Lead Roaster",
-    company: "Caffeine Coffee Dhaka",
-  },
-  {
-    quote:
-      "From naming advice to interior signage and launch branding, Doorstep operated like an extension of our in-house team. Highly recommended for any serious retail venture in Bangladesh.",
-    author: "Managing Partner",
-    company: "Chefs Canvas Food Court",
-  },
-];
 
 export default function PortfolioPage() {
   return (
@@ -49,40 +34,7 @@ export default function PortfolioPage() {
       </section>
 
       {/* ========================================================
-          3. CLIENT TESTIMONIALS (DIRECT HEADING - ZERO BADGES)
-      ======================================================== */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-[#F4F5F8] border border-[#E3E5EC] rounded-3xl p-8 sm:p-12 lg:p-16">
-          <div className="max-w-xl mb-12">
-            <h2 className="text-3xl font-bold text-[#12151B] tracking-tight">
-              Words From Our Partners
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {testimonials.map((t, idx) => (
-              <div
-                key={idx}
-                className="bg-white p-8 sm:p-10 rounded-2xl border border-[#E3E5EC] flex flex-col justify-between space-y-6 hover:shadow-md transition-shadow"
-              >
-                <div className="space-y-4">
-                  <Quote className="w-8 h-8 text-[#2954F5]/30" />
-                  <p className="text-base text-[#12151B] leading-relaxed italic">
-                    &ldquo;{t.quote}&rdquo;
-                  </p>
-                </div>
-                <div className="pt-4 border-t border-[#F4F5F8]">
-                  <h4 className="font-bold text-sm text-[#12151B]">{t.company}</h4>
-                  <p className="text-xs text-[#5B5F6B] mt-0.5">{t.author}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================
-          4. INQUIRY CTA (BRAND BLUE & RED CTA)
+          3. INQUIRY CTA (BRAND BLUE & RED CTA)
       ======================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-[#1E42D0] text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 lg:p-16 relative overflow-hidden shadow-2xl border border-blue-400/30">

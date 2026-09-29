@@ -12,14 +12,19 @@ import {
   Send,
   Copy,
   Check,
+  ChevronDown,
 } from "lucide-react";
 
 const SERVICE_OPTIONS = [
   { id: "digital", label: "Digital Marketing" },
   { id: "branding", label: "Brand Identity" },
   { id: "creative", label: "Creative & Content" },
-  { id: "packaging", label: "Packaging & Print" },
+  { id: "packaging", label: "Packaging & Print Design" },
   { id: "strategy", label: "Marketing Solutions" },
+  { id: "reels", label: "Reels & Short Video Production" },
+  { id: "commercial", label: "Commercial & Video Production" },
+  { id: "motion", label: "Motion Graphics & Animation" },
+  { id: "retainer", label: "Full Agency Retainer / Custom Project" },
 ];
 
 const BUDGET_RANGES = [
@@ -39,7 +44,7 @@ export default function ContactClient() {
     email: "",
     phone: "",
     company: "",
-    services: initialService ? [initialService] : [] as string[],
+    service: "",
     budget: "",
     message: "",
   });
@@ -49,25 +54,18 @@ export default function ContactClient() {
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   useEffect(() => {
-    if (initialService && !formData.services.includes(initialService)) {
+    if (initialService) {
+      const match = SERVICE_OPTIONS.find(
+        (s) =>
+          s.id.toLowerCase() === initialService.toLowerCase() ||
+          s.label.toLowerCase().includes(initialService.toLowerCase())
+      );
       setFormData((prev) => ({
         ...prev,
-        services: [...prev.services, initialService],
+        service: match ? match.label : initialService,
       }));
     }
   }, [initialService]);
-
-  const toggleService = (id: string) => {
-    setFormData((prev) => {
-      const exists = prev.services.includes(id);
-      return {
-        ...prev,
-        services: exists
-          ? prev.services.filter((s) => s !== id)
-          : [...prev.services, id],
-      };
-    });
-  };
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(AGENCY_INFO.email);
@@ -202,7 +200,7 @@ export default function ContactClient() {
                   email: "",
                   phone: "",
                   company: "",
-                  services: [],
+                  service: "",
                   budget: "",
                   message: "",
                 });
@@ -221,38 +219,31 @@ export default function ContactClient() {
               </p>
             </div>
 
-            {/* Service Multi-Select */}
-            <div className="space-y-2.5">
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#12151B]">
+            {/* Service Dropdown */}
+            <div className="space-y-1.5">
+              <label htmlFor="service" className="block text-xs font-semibold text-[#12151B]">
                 Services Needed <span className="text-[#E51F25]">*</span>
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {SERVICE_OPTIONS.map((svc) => {
-                  const isChecked = formData.services.includes(svc.id);
-                  return (
-                    <button
-                      key={svc.id}
-                      type="button"
-                      onClick={() => toggleService(svc.id)}
-                      className={`text-left px-4 py-3 rounded-xl border text-xs font-medium transition-all flex items-center justify-between cursor-pointer ${
-                        isChecked
-                          ? "bg-[#2954F5]/5 border-[#2954F5] text-[#2954F5] font-semibold"
-                          : "bg-white border-[#E3E5EC] text-[#5B5F6B] hover:border-gray-400"
-                      }`}
-                    >
-                      <span>{svc.label}</span>
-                      <div
-                        className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 ${
-                          isChecked
-                            ? "bg-[#2954F5] border-[#2954F5] text-white"
-                            : "border-gray-300 bg-white"
-                        }`}
-                      >
-                        {isChecked && <Check className="w-3 h-3" />}
-                      </div>
-                    </button>
-                  );
-                })}
+              <div className="relative">
+                <select
+                  id="service"
+                  required
+                  value={formData.service}
+                  onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-[#E3E5EC] bg-[#FDFDFC] text-sm text-[#12151B] focus:outline-none focus:ring-2 focus:ring-[#1E42D0] focus:border-transparent transition-all cursor-pointer appearance-none pr-10"
+                >
+                  <option value="" disabled>
+                    Select the service you need...
+                  </option>
+                  {SERVICE_OPTIONS.map((svc) => (
+                    <option key={svc.id} value={svc.label}>
+                      {svc.label}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#5B5F6B]">
+                  <ChevronDown className="w-4 h-4" />
+                </div>
               </div>
             </div>
 
@@ -323,19 +314,24 @@ export default function ContactClient() {
               <label htmlFor="budget" className="block text-xs font-semibold text-[#12151B]">
                 Estimated Budget Range
               </label>
-              <select
-                id="budget"
-                value={formData.budget}
-                onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                className="w-full px-4 py-3 rounded-xl border border-[#E3E5EC] bg-[#FDFDFC] text-sm text-[#12151B] focus:outline-none focus:ring-2 focus:ring-[#2954F5] focus:border-transparent transition-all"
-              >
-                <option value="">Select an estimated investment level...</option>
-                {BUDGET_RANGES.map((b, idx) => (
-                  <option key={idx} value={b}>
-                    {b}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  id="budget"
+                  value={formData.budget}
+                  onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                  className="w-full px-4 py-3 rounded-xl border border-[#E3E5EC] bg-[#FDFDFC] text-sm text-[#12151B] focus:outline-none focus:ring-2 focus:ring-[#1E42D0] focus:border-transparent transition-all cursor-pointer appearance-none pr-10"
+                >
+                  <option value="">Select an estimated investment level...</option>
+                  {BUDGET_RANGES.map((b, idx) => (
+                    <option key={idx} value={b}>
+                      {b}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#5B5F6B]">
+                  <ChevronDown className="w-4 h-4" />
+                </div>
+              </div>
             </div>
 
             {/* Message */}

@@ -8,6 +8,9 @@ import {
   Target,
   Zap,
   Users2,
+  Search,
+  Palette,
+  Rocket,
 } from "lucide-react";
 
 export const metadata = {
@@ -15,6 +18,45 @@ export const metadata = {
   description:
     "Discover the structured 4-step creative methodology at Doorstep Limited: Understand, Plan, Create, and Deliver & Report.",
 };
+
+const workStepConfig = [
+  {
+    icon: <Search className="w-5 h-5 sm:w-6 sm:h-6" />,
+    bgClass: "bg-[#2954F5]/10 text-[#2954F5] border-[#2954F5]/25",
+    hoverBorder: "hover:border-[#2954F5]",
+    textHover: "group-hover:text-[#2954F5]",
+    taglineClass: "text-[#2954F5]",
+    accentBadge: "text-[#2954F5] bg-[#2954F5]/10 border-[#2954F5]/20",
+    checkColor: "text-[#2954F5]",
+  },
+  {
+    icon: <Target className="w-5 h-5 sm:w-6 sm:h-6" />,
+    bgClass: "bg-[#E51F25]/10 text-[#E51F25] border-[#E51F25]/25",
+    hoverBorder: "hover:border-[#E51F25]",
+    textHover: "group-hover:text-[#E51F25]",
+    taglineClass: "text-[#E51F25]",
+    accentBadge: "text-[#E51F25] bg-[#E51F25]/10 border-[#E51F25]/20",
+    checkColor: "text-[#E51F25]",
+  },
+  {
+    icon: <Palette className="w-5 h-5 sm:w-6 sm:h-6" />,
+    bgClass: "bg-[#2954F5]/10 text-[#2954F5] border-[#2954F5]/25",
+    hoverBorder: "hover:border-[#2954F5]",
+    textHover: "group-hover:text-[#2954F5]",
+    taglineClass: "text-[#2954F5]",
+    accentBadge: "text-[#2954F5] bg-[#2954F5]/10 border-[#2954F5]/20",
+    checkColor: "text-[#2954F5]",
+  },
+  {
+    icon: <Rocket className="w-5 h-5 sm:w-6 sm:h-6" />,
+    bgClass: "bg-[#E51F25]/10 text-[#E51F25] border-[#E51F25]/25",
+    hoverBorder: "hover:border-[#E51F25]",
+    textHover: "group-hover:text-[#E51F25]",
+    taglineClass: "text-[#E51F25]",
+    accentBadge: "text-[#E51F25] bg-[#E51F25]/10 border-[#E51F25]/20",
+    checkColor: "text-[#E51F25]",
+  },
+];
 
 const agencyPrinciples = [
   {
@@ -76,49 +118,81 @@ export default function HowWeWorkPage() {
       </section>
 
       {/* ========================================================
-          2. THE 4-STEP METHODOLOGY (ZERO BADGES)
+          2. THE 4-STEP METHODOLOGY (HOME PAGE CARD STYLE)
       ======================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="space-y-10">
-          {WORK_STEPS.map((step) => (
-            <div
-              key={step.step}
-              className="bg-white border border-[#E3E5EC] rounded-2xl p-8 sm:p-12 hover:border-[#12151B] hover:shadow-lg transition-all"
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                <div className="lg:col-span-4">
-                  <span className="font-mono text-4xl sm:text-5xl font-bold text-[#12151B] block mb-2">
-                    {step.step}
-                  </span>
-                  <h2 className="text-2xl sm:text-3xl font-bold text-[#12151B] tracking-tight">
-                    {step.title}
-                  </h2>
-                  <p className="mt-2 text-sm font-semibold text-[#2954F5]">
-                    {step.tagline}
-                  </p>
-                </div>
+        <div className="max-w-3xl mb-10 sm:mb-12">
+          <span className="text-[#2954F5] text-xs sm:text-sm font-bold uppercase tracking-wider block mb-1">
+            Our 4-Stage Methodology
+          </span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#12151B] tracking-tight">
+            How Every Project Unfolds
+          </h2>
+          <p className="mt-2 text-sm sm:text-base text-[#5B5F6B]">
+            From initial discovery to continuous reporting, here is our transparent end-to-end workflow designed for clarity and commercial impact.
+          </p>
+        </div>
 
-                <div className="lg:col-span-8 space-y-6">
-                  <p className="text-base text-[#12151B] leading-relaxed">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {WORK_STEPS.map((step, idx) => {
+            const config = workStepConfig[idx] || workStepConfig[0];
+            return (
+              <div
+                key={step.step}
+                className={`bg-white p-6 sm:p-7 rounded-2xl border border-[#E3E5EC] flex flex-col justify-between ${config.hoverBorder} hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group`}
+              >
+                <div>
+                  {/* Centered Icon */}
+                  <div className="flex items-center justify-center mb-4 sm:mb-5">
+                    <div
+                      className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl border ${config.bgClass} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-xs`}
+                    >
+                      {config.icon}
+                    </div>
+                  </div>
+
+                  {/* Title & Description */}
+                  <h3
+                    className={`text-lg sm:text-xl font-bold text-[#12151B] mb-2 text-center ${config.textHover} transition-colors tracking-tight`}
+                  >
+                    {step.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#5B5F6B] leading-relaxed mb-6 text-center">
                     {step.desc}
                   </p>
-                  <div className="bg-[#F4F5F8] p-6 rounded-xl border border-[#E3E5EC] space-y-3">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-[#12151B]">
-                      Key Deliverables &amp; Milestones
-                    </h3>
+
+                  {/* Key Deliverables */}
+                  <div className="pt-4 border-t border-[#F4F5F8] space-y-2.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#12151B] block">
+                      Key Deliverables
+                    </span>
                     <ul className="space-y-2">
                       {step.bulletPoints.map((point, pIdx) => (
-                        <li key={pIdx} className="flex items-start gap-2.5 text-sm text-[#5B5F6B]">
-                          <CheckCircle2 className="w-4 h-4 text-[#2954F5] mt-0.5 shrink-0" />
+                        <li
+                          key={pIdx}
+                          className="flex items-start gap-2 text-xs text-[#5B5F6B] leading-snug"
+                        >
+                          <CheckCircle2
+                            className={`w-3.5 h-3.5 ${config.checkColor} mt-0.5 shrink-0`}
+                          />
                           <span>{point}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 </div>
+
+                {/* Footer Tagline */}
+                <div className="mt-6 pt-4 border-t border-[#F4F5F8] w-full">
+                  <span
+                    className={`text-xs font-semibold ${config.taglineClass} block`}
+                  >
+                    {step.tagline}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
