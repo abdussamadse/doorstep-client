@@ -4,9 +4,9 @@ import { TEAM_MEMBERS } from "@/data/agencyData";
 import { ArrowRight } from "lucide-react";
 
 export const metadata = {
-  title: "Our Team — Doorstep Limited | Creative & Strategy Leadership",
+  title: "Our Team - Doorstep Limited | Creative & Strategy Leadership",
   description:
-    "Meet the experienced creative directors, brand strategists, and performance marketers behind Doorstep Limited in Dhaka.",
+    "Meet the experienced creatie directors, brand strategists, and performance marketers behind Doorstep Limited in Dhaka.",
 };
 
 export default function OurTeamPage() {

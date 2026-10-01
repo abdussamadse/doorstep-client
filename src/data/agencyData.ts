@@ -68,7 +68,7 @@ export interface CaseStudy {
   year: string;
   color: string;
   mediaType: "video" | "image" | "carousel";
-  aspectRatio: "9:16" | "16:9" | "1:1" | "4:3";
+  aspectRatio: "9:16" | "16:9" | "1:1" | "4:3" | "4:5";
   thumbnail: string;
   videoUrl?: string;
   duration?: string;

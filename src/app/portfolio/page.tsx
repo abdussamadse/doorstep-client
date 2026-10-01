@@ -4,7 +4,7 @@ import PortfolioClient from "./PortfolioClient";
 import { ArrowRight } from "lucide-react";
 
 export const metadata = {
-  title: "Portfolio — Doorstep Limited | Case Studies & Selected Work",
+  title: "Portfolio - Doorstep Limited | Case Studies & Selected Work",
   description:
     "Explore case studies in branding, packaging, digital marketing, and creative production from Doorstep Limited, Dhaka.",
 };

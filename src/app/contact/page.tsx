@@ -3,7 +3,7 @@ import ContactClient from "./ContactClient";
 import { Navigation } from "lucide-react";
 
 export const metadata = {
-  title: "Get in Touch — Doorstep Limited | Dhaka Agency Studio",
+  title: "Get in Touch - Doorstep Limited | Dhaka Agency Studio",
   description:
     "Contact Doorstep Limited in Kolabagan, Dhaka. Request a quote or project brief for branding, packaging, digital marketing, and creative production.",
 };

@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 export const metadata = {
-  title: "How We Work — Doorstep Limited | Agency Methodology",
+  title: "How We Work - Doorstep Limited | Agency Methodology",
   description:
     "Discover the structured 4-step creative methodology at Doorstep Limited: Understand, Plan, Create, and Deliver & Report.",
 };
