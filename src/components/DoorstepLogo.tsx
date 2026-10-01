@@ -1,31 +1,35 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface LogoProps {
   className?: string;
   iconSize?: number;
+  variant?: "horizontal" | "square";
 }
 
-export default function DoorstepLogo({ className = "", iconSize = 28 }: LogoProps) {
+export default function DoorstepLogo({
+  className = "",
+  variant = "horizontal",
+}: LogoProps) {
+  const isSquare = variant === "square";
+
   return (
-    <Link href="/" className={`inline-flex items-center gap-2.5 group transition-opacity hover:opacity-90 ${className}`}>
-      <svg
-        width={iconSize}
-        height={iconSize}
-        viewBox="0 0 120 120"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="flex-shrink-0 transition-transform duration-300 group-hover:scale-105"
-      >
-        <path
-          d="M20 20c0-5.5 4.5-10 10-10h20c27.6 0 50 22.4 50 50s-22.4 50-50 50H30c-5.5 0-10-4.5-10-10V70h26c11 0 20-9 20-20s-9-20-20-20H20z"
-          fill="#2954F5"
-        />
-        <rect x="20" y="42" width="26" height="26" rx="8" fill="#E51F25" />
-      </svg>
-      <span className="font-display font-bold text-lg tracking-tight text-[#12151B]">
-        Doorstep <span className="text-[#E51F25]">Limited</span>
-      </span>
+    <Link
+      href="/"
+      className={`inline-flex items-center group transition-opacity hover:opacity-90 ${className}`}
+      aria-label="Doorstep Limited Home"
+    >
+      <Image
+        src={isSquare ? "/logo/80X80 px-01.png" : "/logo/400X90px.png"}
+        alt="Doorstep Limited"
+        width={isSquare ? 48 : 200}
+        height={isSquare ? 48 : 45}
+        priority
+        className={`${
+          isSquare ? "h-10 w-10" : "h-8 sm:h-9 md:h-10 w-auto"
+        } object-contain transition-transform duration-300 group-hover:scale-[1.02]`}
+      />
     </Link>
   );
 }

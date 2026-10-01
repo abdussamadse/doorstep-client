@@ -26,7 +26,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Doorstep Limited — Marketing & Branding Agency Dhaka",
+  title: "Doorstep Limited - Marketing & Branding Agency Dhaka",
   description:
     "Doorstep Limited is a full-service marketing and branding agency in Dhaka, Bangladesh. We build identities, run campaigns, and make the content that carries a brand from idea to shelf.",
   keywords: [
@@ -37,9 +37,14 @@ export const metadata: Metadata = {
     "Packaging Design",
     "Social Media Marketing",
   ],
-  authors: [{ name: "Doorstep Limited" }],
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/logo/32X32px-01.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo/80X80 px-01.png", sizes: "80x80", type: "image/png" },
+    ],
+    apple: [
+      { url: "/logo/80X80 px-01.png", sizes: "80x80", type: "image/png" },
+    ],
   },
 };
 
