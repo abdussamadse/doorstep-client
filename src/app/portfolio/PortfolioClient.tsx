@@ -112,21 +112,12 @@ function PortfolioCard({
   );
 }
 
+import { usePortfolios } from "@/hooks/useCMS";
+
 export default function PortfolioClient() {
-  const [portfolioItems, setPortfolioItems] = useState<CaseStudy[]>(PORTFOLIO_ITEMS);
+  const { data: portfolioItems = [], isLoading } = usePortfolios();
   const [activeCategoryKey, setActiveCategoryKey] = useState<string>("All");
   const [playingVideos, setPlayingVideos] = useState<Record<string, boolean>>({});
-
-  useEffect(() => {
-    const load = () => {
-      setPortfolioItems(
-        getStoredData<CaseStudy[]>(CMS_KEYS.PORTFOLIO, PORTFOLIO_ITEMS)
-      );
-    };
-    load();
-    window.addEventListener("doorstep_cms_updated", load);
-    return () => window.removeEventListener("doorstep_cms_updated", load);
-  }, []);
 
   const handlePlayVideo = (id: string) => {
     setPlayingVideos((prev) => ({ ...prev, [id]: true }));

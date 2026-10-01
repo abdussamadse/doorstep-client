@@ -4,15 +4,19 @@ import React, { useState, useEffect } from "react";
 import { TeamMember } from "@/data/agencyData";
 import { PlusCircle, Edit2, Trash2, X, User } from "lucide-react";
 import {
-  getStoredData,
-  setStoredData,
-  CMS_KEYS,
-  INITIAL_CMS_DATA,
-} from "@/lib/cmsStore";
+  useTeam,
+  useCreateTeamMember,
+  useUpdateTeamMember,
+  useDeleteTeamMember,
+} from "@/hooks/useCMS";
 import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
 
 export default function AdminTeamPage() {
-  const [team, setTeam] = useState<TeamMember[]>(INITIAL_CMS_DATA.team);
+  const { data: team = [], isLoading } = useTeam();
+  const createMutation = useCreateTeamMember();
+  const updateMutation = useUpdateTeamMember();
+  const deleteMutation = useDeleteTeamMember();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
 
@@ -22,14 +26,6 @@ export default function AdminTeamPage() {
   const [formBio, setFormBio] = useState("");
   const [formImage, setFormImage] = useState("");
   const [formDept, setFormDept] = useState("Leadership");
-
-  useEffect(() => {
-    const data = getStoredData<TeamMember[]>(
-      CMS_KEYS.TEAM,
-      INITIAL_CMS_DATA.team
-    );
-    setTeam(data);
-  }, []);
 
   const handleOpenAdd = () => {
     setEditingMember(null);
@@ -51,43 +47,33 @@ export default function AdminTeamPage() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (name: string) => {
+  const handleDelete = (name: string, memberId?: string) => {
     if (!confirm(`Are you sure you want to remove ${name} from team?`)) return;
-    const updated = team.filter((m) => m.name !== name);
-    setTeam(updated);
-    setStoredData(CMS_KEYS.TEAM, updated);
+    deleteMutation.mutate(memberId || name);
   };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (editingMember) {
-      const updated = team.map((m) =>
-        m.name === editingMember.name
-          ? {
-              ...m,
-              name: formName,
-              role: formRole,
-              bio: formBio,
-              image: formImage,
-              dept: formDept,
-            }
-          : m
-      );
-      setTeam(updated);
-      setStoredData(CMS_KEYS.TEAM, updated);
+      updateMutation.mutate({
+        id: (editingMember as any).id || (editingMember as any)._id || editingMember.name,
+        data: {
+          name: formName,
+          role: formRole,
+          bio: formBio,
+          image: formImage,
+          dept: formDept,
+        },
+      });
     } else {
-      const newMember: TeamMember = {
-        id: `team-${Date.now()}`,
+      createMutation.mutate({
         name: formName,
         role: formRole,
         bio: formBio,
         image: formImage,
         dept: formDept,
-      };
-      const updated = [...team, newMember];
-      setTeam(updated);
-      setStoredData(CMS_KEYS.TEAM, updated);
+      });
     }
 
     setIsModalOpen(false);
@@ -161,7 +147,7 @@ export default function AdminTeamPage() {
               </button>
 
               <button
-                onClick={() => handleDelete(member.name)}
+                onClick={() => handleDelete(member.name, (member as any).id || (member as any)._id)}
                 className="inline-flex items-center gap-1 text-xs text-red-600 font-semibold hover:underline cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />

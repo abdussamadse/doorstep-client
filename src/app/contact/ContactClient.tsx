@@ -42,9 +42,12 @@ const BUDGET_RANGES = [
   "Monthly Retainer Discussion",
 ];
 
+import { useCreateInquiry } from "@/hooks/useCMS";
+
 export default function ContactClient() {
   const searchParams = useSearchParams();
   const initialService = searchParams.get("service") || "";
+  const createInquiryMutation = useCreateInquiry();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -80,39 +83,27 @@ export default function ContactClient() {
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const newInquiry: InquiryItem = {
-      id: `inq-${Date.now()}`,
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      serviceNeeded: formData.service || "General Inquiry",
-      company: formData.company || undefined,
-      budget: formData.budget || undefined,
-      message: formData.message,
-      status: "New",
-      createdAt: new Date().toLocaleString("en-US", {
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        hour12: true,
-      }),
-    };
-
-    const currentInquiries = getStoredData<InquiryItem[]>(
-      CMS_KEYS.INQUIRIES,
-      INITIAL_CMS_DATA.inquiries
-    );
-    setStoredData(CMS_KEYS.INQUIRIES, [newInquiry, ...currentInquiries]);
-
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await createInquiryMutation.mutateAsync({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        serviceNeeded: formData.service || "General Inquiry",
+        company: formData.company || undefined,
+        budget: formData.budget || undefined,
+        message: formData.message,
+      });
       setSubmitted(true);
-    }, 600);
+    } catch (err) {
+      console.error("Inquiry error:", err);
+      setSubmitted(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

@@ -1,9 +1,20 @@
+"use client";
+
 import React from "react";
 import { AGENCY_INFO } from "@/data/agencyData";
+import { useSettings } from "@/hooks/useCMS";
 import { Home, Mail, Phone } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const { data: settings } = useSettings();
+
+  const phone = settings?.phone || AGENCY_INFO.phone;
+  const email = settings?.email || AGENCY_INFO.email;
+  const address = settings?.address || AGENCY_INFO.address;
+  const blurb = settings?.blurb || "We are a marketing and branding agency that helps brands and organizations break barriers, pushing your identity forward into the future.";
+  const facebook = settings?.social?.facebook || AGENCY_INFO.social.facebook;
+  const instagram = settings?.social?.instagram || AGENCY_INFO.social.instagram;
 
   return (
     <footer className="mt-auto bg-[#1738B5] text-white border-t border-blue-400/20">
@@ -15,7 +26,7 @@ export default function Footer() {
               ABOUT US
             </h3>
             <p className="text-xs sm:text-sm text-blue-100/90 leading-relaxed font-normal max-w-sm">
-              We are a marketing and branding agency that helps brands and organizations break barriers, pushing your identity forward into the future.
+              {blurb}
             </p>
           </div>
 
@@ -27,7 +38,7 @@ export default function Footer() {
             <div className="flex items-center gap-2.5">
               {/* Facebook */}
               <a
-                href={AGENCY_INFO.social.facebook}
+                href={facebook}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Facebook"
@@ -53,7 +64,7 @@ export default function Footer() {
 
               {/* Instagram */}
               <a
-                href={AGENCY_INFO.social.instagram}
+                href={instagram}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
@@ -76,7 +87,7 @@ export default function Footer() {
               <div className="flex items-start gap-2.5">
                 <Home className="w-4 h-4 text-white shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
-                  House 60, Road Dolphin Goli, Kolabagan, Dhaka-1205, Bangladesh
+                  {address}
                 </span>
               </div>
 
@@ -84,10 +95,10 @@ export default function Footer() {
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-white shrink-0" />
                 <a
-                  href={`mailto:${AGENCY_INFO.email}`}
+                  href={`mailto:${email}`}
                   className="hover:text-white transition-colors"
                 >
-                  {AGENCY_INFO.email}
+                  {email}
                 </a>
               </div>
 
@@ -95,10 +106,10 @@ export default function Footer() {
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-white shrink-0" />
                 <a
-                  href={`tel:${AGENCY_INFO.phone}`}
+                  href={`tel:${phone}`}
                   className="hover:text-white transition-colors"
                 >
-                  {AGENCY_INFO.phone}
+                  {phone}
                 </a>
               </div>
             </div>

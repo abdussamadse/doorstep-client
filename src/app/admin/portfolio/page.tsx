@@ -20,16 +20,20 @@ import {
   ExternalLink,
 } from "lucide-react";
 import {
-  getStoredData,
-  setStoredData,
-  CMS_KEYS,
-  INITIAL_CMS_DATA,
-} from "@/lib/cmsStore";
+  usePortfolios,
+  useCreatePortfolio,
+  useUpdatePortfolio,
+  useDeletePortfolio,
+} from "@/hooks/useCMS";
 import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
 
 export default function AdminPortfolioPage() {
-  const [items, setItems] = useState<CaseStudy[]>(INITIAL_CMS_DATA.portfolio);
   const [filterCat, setFilterCat] = useState<string>("All");
+  const { data: items = [], isLoading } = usePortfolios(filterCat);
+  const createMutation = useCreatePortfolio();
+  const updateMutation = useUpdatePortfolio();
+  const deleteMutation = useDeletePortfolio();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<CaseStudy | null>(null);
 
@@ -40,14 +44,6 @@ export default function AdminPortfolioPage() {
   const [formThumbnail, setFormThumbnail] = useState("");
   const [formVideoUrl, setFormVideoUrl] = useState("");
   const [formDuration, setFormDuration] = useState("");
-
-  useEffect(() => {
-    const data = getStoredData<CaseStudy[]>(
-      CMS_KEYS.PORTFOLIO,
-      INITIAL_CMS_DATA.portfolio
-    );
-    setItems(data);
-  }, []);
 
   const handleOpenAdd = () => {
     setEditingItem(null);
@@ -73,9 +69,7 @@ export default function AdminPortfolioPage() {
 
   const handleDelete = (id: string) => {
     if (!confirm("Are you sure you want to remove this portfolio work?")) return;
-    const updated = items.filter((item) => item.id !== id);
-    setItems(updated);
-    setStoredData(CMS_KEYS.PORTFOLIO, updated);
+    deleteMutation.mutate(id);
   };
 
   const handleSave = (e: React.FormEvent) => {
@@ -93,26 +87,21 @@ export default function AdminPortfolioPage() {
 
     if (editingItem) {
       // Update
-      const updated = items.map((i) =>
-        i.id === editingItem.id
-          ? {
-              ...i,
-              title: formTitle,
-              category: formCategory,
-              mediaType: formMediaType,
-              aspectRatio: aspect,
-              thumbnail: formThumbnail,
-              videoUrl: formMediaType === "video" ? formVideoUrl : undefined,
-              duration: formDuration || undefined,
-            }
-          : i
-      );
-      setItems(updated);
-      setStoredData(CMS_KEYS.PORTFOLIO, updated);
+      updateMutation.mutate({
+        id: editingItem.id,
+        data: {
+          title: formTitle,
+          category: formCategory,
+          mediaType: formMediaType,
+          aspectRatio: aspect,
+          thumbnail: formThumbnail,
+          videoUrl: formMediaType === "video" ? formVideoUrl : undefined,
+          duration: formDuration || undefined,
+        },
+      });
     } else {
       // Create new
-      const newItem: CaseStudy = {
-        id: `work-${Date.now()}`,
+      createMutation.mutate({
         title: formTitle,
         category: formCategory,
         clientType: `${formCategory} Production`,
@@ -128,10 +117,7 @@ export default function AdminPortfolioPage() {
         thumbnail: formThumbnail || "/img/services/creative-content.jpg",
         videoUrl: formMediaType === "video" ? formVideoUrl || "/videos/hero.mp4" : undefined,
         duration: formDuration || undefined,
-      };
-      const updated = [newItem, ...items];
-      setItems(updated);
-      setStoredData(CMS_KEYS.PORTFOLIO, updated);
+      });
     }
 
     setIsModalOpen(false);

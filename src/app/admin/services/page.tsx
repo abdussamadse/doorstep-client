@@ -3,15 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { ServiceItem } from "@/data/agencyData";
 import { Edit2, Plus, Trash2, CheckCircle2, Save, X } from "lucide-react";
-import {
-  getStoredData,
-  setStoredData,
-  CMS_KEYS,
-  INITIAL_CMS_DATA,
-} from "@/lib/cmsStore";
+import { useServices, useUpdateService } from "@/hooks/useCMS";
 
 export default function AdminServicesPage() {
-  const [services, setServices] = useState<ServiceItem[]>(INITIAL_CMS_DATA.services);
+  const { data: services = [], isLoading } = useServices();
+  const updateMutation = useUpdateService();
   const [editingService, setEditingService] = useState<ServiceItem | null>(null);
 
   // Form Fields
@@ -22,14 +18,6 @@ export default function AdminServicesPage() {
   const [formTags, setFormTags] = useState<string[]>([]);
   const [newDeliverable, setNewDeliverable] = useState("");
   const [newTag, setNewTag] = useState("");
-
-  useEffect(() => {
-    const data = getStoredData<ServiceItem[]>(
-      CMS_KEYS.SERVICES,
-      INITIAL_CMS_DATA.services
-    );
-    setServices(data);
-  }, []);
 
   const handleOpenEdit = (service: ServiceItem) => {
     setEditingService(service);
@@ -64,21 +52,17 @@ export default function AdminServicesPage() {
     e.preventDefault();
     if (!editingService) return;
 
-    const updated = services.map((s) =>
-      s.id === editingService.id
-        ? {
-            ...s,
-            name: formName,
-            shortDesc: formShortDesc,
-            description: formDescription,
-            deliverables: formDeliverables,
-            tags: formTags,
-          }
-        : s
-    );
+    updateMutation.mutate({
+      id: editingService.id,
+      data: {
+        name: formName,
+        shortDesc: formShortDesc,
+        description: formDescription,
+        deliverables: formDeliverables,
+        tags: formTags,
+      },
+    });
 
-    setServices(updated);
-    setStoredData(CMS_KEYS.SERVICES, updated);
     setEditingService(null);
   };
 

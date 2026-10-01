@@ -3,15 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { WorkStep } from "@/data/agencyData";
 import { Edit2, CheckCircle2, X } from "lucide-react";
-import {
-  getStoredData,
-  setStoredData,
-  CMS_KEYS,
-  INITIAL_CMS_DATA,
-} from "@/lib/cmsStore";
+import { useMethodology, useUpdateMethodology } from "@/hooks/useCMS";
 
 export default function AdminMethodologyPage() {
-  const [steps, setSteps] = useState<WorkStep[]>(INITIAL_CMS_DATA.methodology);
+  const { data: steps = [], isLoading } = useMethodology();
+  const updateMutation = useUpdateMethodology();
   const [editingStep, setEditingStep] = useState<WorkStep | null>(null);
 
   // Form State
@@ -20,14 +16,6 @@ export default function AdminMethodologyPage() {
   const [formDesc, setFormDesc] = useState("");
   const [formBullets, setFormBullets] = useState<string[]>([]);
   const [newBullet, setNewBullet] = useState("");
-
-  useEffect(() => {
-    const data = getStoredData<WorkStep[]>(
-      CMS_KEYS.METHODOLOGY,
-      INITIAL_CMS_DATA.methodology
-    );
-    setSteps(data);
-  }, []);
 
   const handleOpenEdit = (step: WorkStep) => {
     setEditingStep(step);
@@ -51,20 +39,16 @@ export default function AdminMethodologyPage() {
     e.preventDefault();
     if (!editingStep) return;
 
-    const updated = steps.map((s) =>
-      s.step === editingStep.step
-        ? {
-            ...s,
-            title: formTitle,
-            tagline: formTagline,
-            desc: formDesc,
-            bulletPoints: formBullets,
-          }
-        : s
-    );
+    updateMutation.mutate({
+      step: editingStep.step,
+      data: {
+        title: formTitle,
+        tagline: formTagline,
+        desc: formDesc,
+        bulletPoints: formBullets,
+      },
+    });
 
-    setSteps(updated);
-    setStoredData(CMS_KEYS.METHODOLOGY, updated);
     setEditingStep(null);
   };
 

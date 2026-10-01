@@ -48,6 +48,9 @@ export const metadata: Metadata = {
   },
 };
 
+import QueryProvider from "@/providers/QueryProvider";
+import SiteShell from "@/components/SiteShell";
+
 export default function RootLayout({
   children,
 }: {
@@ -56,9 +59,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} light`}>
       <body className="min-h-screen flex flex-col bg-[#FDFDFC] text-[#12151B] antialiased selection:bg-[#2954F5]/10 selection:text-[#2954F5]">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <QueryProvider>
+          <SiteShell>{children}</SiteShell>
+        </QueryProvider>
       </body>
     </html>
   );

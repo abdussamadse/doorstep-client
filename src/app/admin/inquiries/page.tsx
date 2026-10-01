@@ -15,41 +15,27 @@ import {
   Calendar,
 } from "lucide-react";
 import {
-  getStoredData,
-  setStoredData,
-  CMS_KEYS,
-  INITIAL_CMS_DATA,
-  InquiryItem,
-} from "@/lib/cmsStore";
+  useInquiries,
+  useUpdateInquiryStatus,
+  useDeleteInquiry,
+} from "@/hooks/useCMS";
+import { InquiryItem } from "@/lib/cmsStore";
 
 export default function AdminInquiriesPage() {
-  const [inquiries, setInquiries] = useState<InquiryItem[]>(
-    INITIAL_CMS_DATA.inquiries
-  );
   const [statusFilter, setStatusFilter] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    const data = getStoredData<InquiryItem[]>(
-      CMS_KEYS.INQUIRIES,
-      INITIAL_CMS_DATA.inquiries
-    );
-    setInquiries(data);
-  }, []);
+  const { data: inquiries = [], isLoading } = useInquiries(statusFilter);
+  const updateStatusMutation = useUpdateInquiryStatus();
+  const deleteMutation = useDeleteInquiry();
 
   const handleUpdateStatus = (id: string, newStatus: InquiryItem["status"]) => {
-    const updated = inquiries.map((item) =>
-      item.id === id ? { ...item, status: newStatus } : item
-    );
-    setInquiries(updated);
-    setStoredData(CMS_KEYS.INQUIRIES, updated);
+    updateStatusMutation.mutate({ id, status: newStatus });
   };
 
   const handleDelete = (id: string) => {
     if (!confirm("Are you sure you want to delete this inquiry?")) return;
-    const updated = inquiries.filter((item) => item.id !== id);
-    setInquiries(updated);
-    setStoredData(CMS_KEYS.INQUIRIES, updated);
+    deleteMutation.mutate(id);
   };
 
   const filtered = inquiries.filter((item) => {

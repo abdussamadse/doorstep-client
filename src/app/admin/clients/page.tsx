@@ -2,28 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import { PlusCircle, Trash2, X, ExternalLink } from "lucide-react";
-import {
-  getStoredData,
-  setStoredData,
-  CMS_KEYS,
-  INITIAL_CMS_DATA,
-  ClientLogoCMS,
-} from "@/lib/cmsStore";
+import { useClients, useCreateClient, useDeleteClient } from "@/hooks/useCMS";
 import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
 
 export default function AdminClientsPage() {
-  const [clients, setClients] = useState<ClientLogoCMS[]>(INITIAL_CMS_DATA.clients);
+  const { data: clients = [], isLoading } = useClients();
+  const createMutation = useCreateClient();
+  const deleteMutation = useDeleteClient();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formName, setFormName] = useState("");
   const [formLogo, setFormLogo] = useState("");
-
-  useEffect(() => {
-    const data = getStoredData<ClientLogoCMS[]>(
-      CMS_KEYS.CLIENTS,
-      INITIAL_CMS_DATA.clients
-    );
-    setClients(data);
-  }, []);
 
   const handleOpenAdd = () => {
     setFormName("");
@@ -33,21 +22,15 @@ export default function AdminClientsPage() {
 
   const handleDelete = (id: string) => {
     if (!confirm("Are you sure you want to remove this client logo?")) return;
-    const updated = clients.filter((c) => c.id !== id);
-    setClients(updated);
-    setStoredData(CMS_KEYS.CLIENTS, updated);
+    deleteMutation.mutate(id);
   };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    const newClient: ClientLogoCMS = {
-      id: `client-${Date.now()}`,
+    createMutation.mutate({
       name: formName,
       logo: formLogo,
-    };
-    const updated = [...clients, newClient];
-    setClients(updated);
-    setStoredData(CMS_KEYS.CLIENTS, updated);
+    });
     setIsModalOpen(false);
   };
 

@@ -3,62 +3,50 @@
 import React, { useState, useEffect } from "react";
 import { AgencyInfo } from "@/data/agencyData";
 import { Save, Check, Building, Phone, Mail, MapPin, Globe } from "lucide-react";
-import {
-  getStoredData,
-  setStoredData,
-  CMS_KEYS,
-  INITIAL_CMS_DATA,
-} from "@/lib/cmsStore";
+import { useSettings, useUpdateSettings } from "@/hooks/useCMS";
 
 export default function AdminSettingsPage() {
-  const [settings, setSettings] = useState<AgencyInfo>(
-    INITIAL_CMS_DATA.settings
-  );
+  const { data: settings } = useSettings();
+  const updateMutation = useUpdateSettings();
   const [savedSuccess, setSavedSuccess] = useState(false);
 
   // Form State
-  const [phone, setPhone] = useState(settings.phone);
-  const [email, setEmail] = useState(settings.email);
-  const [address, setAddress] = useState(settings.address);
-  const [tagline, setTagline] = useState(settings.tagline);
-  const [blurb, setBlurb] = useState(settings.blurb);
-  const [facebook, setFacebook] = useState(settings.social.facebook);
-  const [instagram, setInstagram] = useState(settings.social.instagram);
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [tagline, setTagline] = useState("");
+  const [blurb, setBlurb] = useState("");
+  const [facebook, setFacebook] = useState("");
+  const [instagram, setInstagram] = useState("");
 
   useEffect(() => {
-    const data = getStoredData<AgencyInfo>(
-      CMS_KEYS.SETTINGS,
-      INITIAL_CMS_DATA.settings
-    );
-    setSettings(data);
-    setPhone(data.phone);
-    setEmail(data.email);
-    setAddress(data.address);
-    setTagline(data.tagline);
-    setBlurb(data.blurb);
-    setFacebook(data.social.facebook);
-    setInstagram(data.social.instagram);
-  }, []);
+    if (settings) {
+      setPhone(settings.phone || "");
+      setEmail(settings.email || "");
+      setAddress(settings.address || "");
+      setTagline(settings.tagline || "");
+      setBlurb(settings.blurb || "");
+      setFacebook(settings.social?.facebook || "");
+      setInstagram(settings.social?.instagram || "");
+    }
+  }, [settings]);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const updated: AgencyInfo = {
-      ...settings,
+    updateMutation.mutate({
       phone,
       email,
       address,
       tagline,
       blurb,
       social: {
-        ...settings.social,
         facebook,
         instagram,
+        linkedin: settings?.social?.linkedin || "https://linkedin.com",
       },
-    };
+    });
 
-    setSettings(updated);
-    setStoredData(CMS_KEYS.SETTINGS, updated);
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 3000);
   };

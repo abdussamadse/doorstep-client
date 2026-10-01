@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useClients } from "@/hooks/useCMS";
 
 export interface ClientLogoItem {
   name: string;
@@ -21,9 +24,20 @@ export const CLIENT_LOGOS: ClientLogoItem[] = [
 ];
 
 export default function ClientLogosGrid() {
+  const { data: dynamicClients = [] } = useClients();
+
+  // Prefer dynamic clients from database if available, otherwise use initial logos
+  const listToRender = dynamicClients.length > 0
+    ? dynamicClients.map((c, i) => ({
+        name: c.name,
+        src: c.logo,
+        theme: i % 2 === 0 ? ("blue" as const) : ("red" as const),
+      }))
+    : CLIENT_LOGOS;
+
   return (
     <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3.5 lg:gap-5">
-      {CLIENT_LOGOS.map((brand, idx) => {
+      {listToRender.map((brand, idx) => {
         const hoverBorder =
           brand.theme === "red"
             ? "hover:border-[#E51F25]"

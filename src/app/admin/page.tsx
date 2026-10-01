@@ -17,43 +17,29 @@ import {
   Mail,
 } from "lucide-react";
 import {
-  getStoredData,
-  CMS_KEYS,
-  INITIAL_CMS_DATA,
-  InquiryItem,
-  setStoredData,
-} from "@/lib/cmsStore";
-import { CaseStudy, ServiceItem, TeamMember, AgencyInfo } from "@/data/agencyData";
+  useDashboardStats,
+  useInquiries,
+  useUpdateInquiryStatus,
+  useSettings,
+  usePortfolios,
+  useServices,
+  useTeam,
+} from "@/hooks/useCMS";
+import { InquiryItem } from "@/lib/cmsStore";
 
 export default function AdminOverviewPage() {
-  const [portfolio, setPortfolio] = useState<CaseStudy[]>(INITIAL_CMS_DATA.portfolio);
-  const [services, setServices] = useState<ServiceItem[]>(INITIAL_CMS_DATA.services);
-  const [team, setTeam] = useState<TeamMember[]>(INITIAL_CMS_DATA.team);
-  const [inquiries, setInquiries] = useState<InquiryItem[]>(INITIAL_CMS_DATA.inquiries);
-  const [settings, setSettings] = useState<AgencyInfo>(INITIAL_CMS_DATA.settings);
-
-  useEffect(() => {
-    const loadData = () => {
-      setPortfolio(getStoredData(CMS_KEYS.PORTFOLIO, INITIAL_CMS_DATA.portfolio));
-      setServices(getStoredData(CMS_KEYS.SERVICES, INITIAL_CMS_DATA.services));
-      setTeam(getStoredData(CMS_KEYS.TEAM, INITIAL_CMS_DATA.team));
-      setInquiries(getStoredData(CMS_KEYS.INQUIRIES, INITIAL_CMS_DATA.inquiries));
-      setSettings(getStoredData(CMS_KEYS.SETTINGS, INITIAL_CMS_DATA.settings));
-    };
-
-    loadData();
-    window.addEventListener("doorstep_cms_updated", loadData);
-    return () => window.removeEventListener("doorstep_cms_updated", loadData);
-  }, []);
+  const { data: stats, isLoading: statsLoading } = useDashboardStats();
+  const { data: inquiries = [] } = useInquiries();
+  const { data: portfolio = [] } = usePortfolios();
+  const { data: services = [] } = useServices();
+  const { data: team = [] } = useTeam();
+  const { data: settings } = useSettings();
+  const updateStatusMutation = useUpdateInquiryStatus();
 
   const newInquiries = inquiries.filter((i) => i.status === "New");
 
   const handleUpdateStatus = (id: string, newStatus: InquiryItem["status"]) => {
-    const updated = inquiries.map((item) =>
-      item.id === id ? { ...item, status: newStatus } : item
-    );
-    setInquiries(updated);
-    setStoredData(CMS_KEYS.INQUIRIES, updated);
+    updateStatusMutation.mutate({ id, status: newStatus });
   };
 
   return (
@@ -293,21 +279,21 @@ export default function AdminOverviewPage() {
                 <span className="text-gray-400 block text-[10px] uppercase font-mono">
                   Phone Number
                 </span>
-                <span className="font-mono text-white">{settings.phone}</span>
+                <span className="font-mono text-white">{settings?.phone || "+880 1700-000000"}</span>
               </div>
 
               <div>
                 <span className="text-gray-400 block text-[10px] uppercase font-mono">
                   Official Email
                 </span>
-                <span className="text-white">{settings.email}</span>
+                <span className="text-white">{settings?.email || "hello@doorstepltd.com"}</span>
               </div>
 
               <div>
                 <span className="text-gray-400 block text-[10px] uppercase font-mono">
                   Office Studio
                 </span>
-                <span className="text-white leading-relaxed">{settings.address}</span>
+                <span className="text-white leading-relaxed">{settings?.address || "Kolabagan, Dhaka, Bangladesh"}</span>
               </div>
             </div>
 
