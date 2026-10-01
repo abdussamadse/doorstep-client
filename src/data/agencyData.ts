@@ -151,6 +151,8 @@ export const AGENCY_SERVICES: ServiceItem[] = [
   },
 ];
 
+export const SERVICES = AGENCY_SERVICES;
+
 export const WORK_STEPS: WorkStep[] = [
   {
     step: "01",
@@ -631,3 +633,6 @@ export const AGENCY_INFO = {
     linkedin: "https://linkedin.com",
   },
 };
+
+export type AgencyInfo = typeof AGENCY_INFO;
+

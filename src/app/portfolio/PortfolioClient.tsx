@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   PORTFOLIO_ITEMS,
   PORTFOLIO_CATEGORIES,
   CaseStudy,
 } from "@/data/agencyData";
+import { getStoredData, CMS_KEYS, INITIAL_CMS_DATA } from "@/lib/cmsStore";
 import { Play } from "lucide-react";
 
 // Ordered categories matching the exact serial requested:
@@ -112,8 +113,20 @@ function PortfolioCard({
 }
 
 export default function PortfolioClient() {
+  const [portfolioItems, setPortfolioItems] = useState<CaseStudy[]>(PORTFOLIO_ITEMS);
   const [activeCategoryKey, setActiveCategoryKey] = useState<string>("All");
   const [playingVideos, setPlayingVideos] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    const load = () => {
+      setPortfolioItems(
+        getStoredData<CaseStudy[]>(CMS_KEYS.PORTFOLIO, PORTFOLIO_ITEMS)
+      );
+    };
+    load();
+    window.addEventListener("doorstep_cms_updated", load);
+    return () => window.removeEventListener("doorstep_cms_updated", load);
+  }, []);
 
   const handlePlayVideo = (id: string) => {
     setPlayingVideos((prev) => ({ ...prev, [id]: true }));
@@ -169,7 +182,7 @@ export default function PortfolioClient() {
             <div className="shrink-0 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#1E42D0] bg-white border border-[#E3E5EC] px-4 py-2 rounded-full w-fit">
               <span>
                 {
-                  PORTFOLIO_ITEMS.filter((i) => i.category === activeCategoryKey)
+                  portfolioItems.filter((i) => i.category === activeCategoryKey)
                     .length
                 }{" "}
                 Works
@@ -186,7 +199,7 @@ export default function PortfolioClient() {
         // --- ALL TAB: CATEGORIES IN EXACT SERIAL ORDER ---
         <div className="space-y-12 sm:space-y-16">
           {ORDERED_CATEGORIES.map((cat) => {
-            const items = PORTFOLIO_ITEMS.filter(
+            const items = portfolioItems.filter(
               (item) => item.category === cat.key
             );
             if (items.length === 0) return null;
@@ -230,7 +243,7 @@ export default function PortfolioClient() {
             gridClass:
               "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6",
           };
-          const items = PORTFOLIO_ITEMS.filter(
+          const items = portfolioItems.filter(
             (item) => item.category === activeCategoryKey
           );
 

@@ -1,7 +1,14 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
+node_modules
 /node_modules
+client/node_modules
+client/.next
+client/out
+server/node_modules
+server/dist
+server/uploads
 /.pnp
 .pnp.*
 .yarn/*
@@ -19,6 +26,7 @@
 
 # production
 /build
+dist
 
 # misc
 .DS_Store

@@ -4,6 +4,13 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { AGENCY_INFO } from "@/data/agencyData";
 import {
+  getStoredData,
+  setStoredData,
+  CMS_KEYS,
+  INITIAL_CMS_DATA,
+  InquiryItem,
+} from "@/lib/cmsStore";
+import {
   Mail,
   Phone,
   MapPin,
@@ -77,11 +84,35 @@ export default function ContactClient() {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API submission
+    const newInquiry: InquiryItem = {
+      id: `inq-${Date.now()}`,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      serviceNeeded: formData.service || "General Inquiry",
+      company: formData.company || undefined,
+      budget: formData.budget || undefined,
+      message: formData.message,
+      status: "New",
+      createdAt: new Date().toLocaleString("en-US", {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      }),
+    };
+
+    const currentInquiries = getStoredData<InquiryItem[]>(
+      CMS_KEYS.INQUIRIES,
+      INITIAL_CMS_DATA.inquiries
+    );
+    setStoredData(CMS_KEYS.INQUIRIES, [newInquiry, ...currentInquiries]);
+
     setTimeout(() => {
       setLoading(false);
       setSubmitted(true);
-    }, 800);
+    }, 600);
   };
 
   return (
