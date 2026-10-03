@@ -96,6 +96,8 @@ export function setStoredData<T>(key: string, data: T): void {
   }
 }
 
+import { DEFAULT_PAGE_CONTENT, PageContentData } from "@/data/pageContentData";
+
 // Keys
 export const CMS_KEYS = {
   PORTFOLIO: "portfolio",
@@ -105,6 +107,7 @@ export const CMS_KEYS = {
   CLIENTS: "clients",
   SETTINGS: "settings",
   INQUIRIES: "inquiries",
+  PAGE_CONTENT: "page_content",
 };
 
 export const INITIAL_CMS_DATA = {
@@ -115,4 +118,5 @@ export const INITIAL_CMS_DATA = {
   clients: CLIENT_LOGOS.map((c, i) => ({ id: `client-${i + 1}`, name: c.name, logo: c.src })),
   settings: AGENCY_INFO,
   inquiries: INITIAL_INQUIRIES,
+  pageContent: DEFAULT_PAGE_CONTENT,
 };

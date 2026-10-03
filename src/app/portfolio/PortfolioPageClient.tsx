@@ -1,0 +1,72 @@
+"use client";
+
+import React from "react";
+import Link from "next/link";
+import PortfolioClient from "./PortfolioClient";
+import { ArrowRight } from "lucide-react";
+import { usePageContent } from "@/hooks/useCMS";
+
+export default function PortfolioPageClient() {
+  const { data: pageContent } = usePageContent();
+  const content = pageContent?.portfolio;
+
+  return (
+    <div className="space-y-24 md:space-y-36 pb-24">
+      {/* ========================================================
+          1. PAGE HERO (DIRECT HEADING - ZERO BADGES)
+      ======================================================== */}
+      <section className="bg-[#F2F4F8] border-b border-[#E3E5EC] py-16 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#12151B] max-w-3xl leading-[1.1]">
+            {content?.heroTitle || "Work crafted with intent, proven by numbers."}
+          </h1>
+          <p className="mt-6 text-lg sm:text-xl text-[#5B5F6B] max-w-2xl leading-relaxed font-normal">
+            {content?.heroDesc || "A selection of recent brand identity, packaging, content, and growth marketing retainers executed for clients in food, beverage, agri-commerce, and lifestyle retail."}
+          </p>
+        </div>
+      </section>
+
+      {/* ========================================================
+          2. PORTFOLIO CLIENT GRID WITH FILTERS & MODAL
+      ======================================================== */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <PortfolioClient />
+      </section>
+
+      {/* ========================================================
+          3. INQUIRY CTA (BRAND BLUE & RED CTA)
+      ======================================================== */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#1E42D0] text-white rounded-2xl sm:rounded-3xl p-6 sm:p-10 lg:p-16 relative overflow-hidden shadow-2xl border border-blue-400/30">
+          {/* Subtle Ambient Brand Glows */}
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-white/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-black/25 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 max-w-2xl space-y-3 sm:space-y-6">
+            <h2 className="text-xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-snug text-white font-display">
+              {content?.ctaTitle || "Ready to bring your brand vision to life?"}
+            </h2>
+            <p className="text-blue-100 text-xs sm:text-base leading-relaxed font-normal">
+              {content?.ctaDesc || "Let’s discuss your upcoming brand launch, campaign, or packaging brief over coffee at our Kolabagan studio."}
+            </p>
+            <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-4">
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-4 rounded-full bg-[#E51F25] text-white font-bold text-xs sm:text-base hover:bg-[#C9181E] transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-red-500/25"
+              >
+                <span>{content?.ctaButtonText || "Start Your Brief"}</span>
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
+              </Link>
+              <a
+                href="tel:+8801785031126"
+                className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-4 rounded-full border border-white/40 text-white font-medium text-xs sm:text-base hover:bg-white/15 transition-colors backdrop-blur-xs"
+              >
+                <span>+880 1785-031126</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

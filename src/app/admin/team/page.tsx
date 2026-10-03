@@ -10,8 +10,12 @@ import {
   useDeleteTeamMember,
 } from "@/hooks/useCMS";
 import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
+import { useToast } from "@/providers/ToastProvider";
+import { useConfirm } from "@/providers/ConfirmModalProvider";
 
 export default function AdminTeamPage() {
+  const { toast } = useToast();
+  const confirm = useConfirm();
   const { data: team = [], isLoading } = useTeam();
   const createMutation = useCreateTeamMember();
   const updateMutation = useUpdateTeamMember();
@@ -48,32 +52,68 @@ export default function AdminTeamPage() {
   };
 
   const handleDelete = (name: string, memberId?: string) => {
-    if (!confirm(`Are you sure you want to remove ${name} from team?`)) return;
-    deleteMutation.mutate(memberId || name);
+    confirm({
+      title: "Remove Team Member?",
+      message: `Are you sure you want to remove ${name} from the team showcase?`,
+      confirmText: "Yes, Remove",
+      cancelText: "Keep Member",
+      variant: "danger",
+      icon: "trash",
+      onConfirm: () => {
+        deleteMutation.mutate(memberId || name, {
+          onSuccess: () => {
+            toast.success(`${name} has been removed from the team.`);
+          },
+          onError: () => {
+            toast.error("Failed to remove team member.");
+          },
+        });
+      },
+    });
   };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (editingMember) {
-      updateMutation.mutate({
-        id: (editingMember as any).id || (editingMember as any)._id || editingMember.name,
-        data: {
+      updateMutation.mutate(
+        {
+          id: (editingMember as any).id || (editingMember as any)._id || editingMember.name,
+          data: {
+            name: formName,
+            role: formRole,
+            bio: formBio,
+            image: formImage,
+            dept: formDept,
+          },
+        },
+        {
+          onSuccess: () => {
+            toast.success("Team member details updated successfully!");
+          },
+          onError: () => {
+            toast.error("Failed to update team member.");
+          },
+        }
+      );
+    } else {
+      createMutation.mutate(
+        {
           name: formName,
           role: formRole,
           bio: formBio,
           image: formImage,
           dept: formDept,
         },
-      });
-    } else {
-      createMutation.mutate({
-        name: formName,
-        role: formRole,
-        bio: formBio,
-        image: formImage,
-        dept: formDept,
-      });
+        {
+          onSuccess: () => {
+            toast.success("New team member added successfully!");
+          },
+          onError: () => {
+            toast.error("Failed to add team member.");
+          },
+        }
+      );
     }
 
     setIsModalOpen(false);

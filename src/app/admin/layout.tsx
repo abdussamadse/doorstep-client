@@ -13,6 +13,7 @@ import {
   Handshake,
   Inbox,
   Settings,
+  FileText,
   ExternalLink,
   Menu,
   X,
@@ -21,6 +22,8 @@ import {
   UserCircle,
 } from "lucide-react";
 import { getStoredData, CMS_KEYS, InquiryItem, INITIAL_CMS_DATA } from "@/lib/cmsStore";
+import { useConfirm } from "@/providers/ConfirmModalProvider";
+import { useToast } from "@/providers/ToastProvider";
 
 const NAV_ITEMS = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },
@@ -30,6 +33,7 @@ const NAV_ITEMS = [
   { name: "Team Members", href: "/admin/team", icon: Users },
   { name: "Client Brands", href: "/admin/clients", icon: Handshake },
   { name: "Leads & Inquiries", href: "/admin/inquiries", icon: Inbox, hasBadge: true },
+  { name: "Pages Content", href: "/admin/pages", icon: FileText },
   { name: "Site Settings", href: "/admin/settings", icon: Settings },
   { name: "My Profile", href: "/admin/profile", icon: UserCircle },
 ];
@@ -41,9 +45,11 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const confirm = useConfirm();
+  const { toast } = useToast();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [newInquiriesCount, setNewInquiriesCount] = useState(0);
-  const [adminUser, setAdminUser] = useState<{ name: string; email: string } | null>(null);
+  const [adminUser, setAdminUser] = useState<{ name: string; email: string; avatar?: string } | null>(null);
   const [authChecked, setAuthChecked] = useState(false);
 
   // If on login page, render clean login view without admin shell
@@ -62,14 +68,18 @@ export default function AdminLayout({
       return;
     }
 
-    const storedUser = localStorage.getItem("doorstep_admin_user");
-    if (storedUser) {
-      try {
-        setAdminUser(JSON.parse(storedUser));
-      } catch (e) {
-        console.error(e);
+    const loadUserData = () => {
+      const storedUser = localStorage.getItem("doorstep_admin_user");
+      if (storedUser) {
+        try {
+          setAdminUser(JSON.parse(storedUser));
+        } catch (e) {
+          console.error(e);
+        }
       }
-    }
+    };
+
+    loadUserData();
     setAuthChecked(true);
 
     const updateCount = () => {
@@ -82,13 +92,31 @@ export default function AdminLayout({
 
     updateCount();
     window.addEventListener("doorstep_cms_updated", updateCount);
-    return () => window.removeEventListener("doorstep_cms_updated", updateCount);
+    window.addEventListener("admin-profile-updated", loadUserData);
+    window.addEventListener("storage", loadUserData);
+
+    return () => {
+      window.removeEventListener("doorstep_cms_updated", updateCount);
+      window.removeEventListener("admin-profile-updated", loadUserData);
+      window.removeEventListener("storage", loadUserData);
+    };
   }, [pathname, isLoginPage, router]);
 
   const handleLogout = () => {
-    localStorage.removeItem("doorstep_admin_token");
-    localStorage.removeItem("doorstep_admin_user");
-    router.push("/admin/login");
+    confirm({
+      title: "Log Out of Admin Portal?",
+      message: "Are you sure you want to end your session? You will need to log back in to access the dashboard.",
+      confirmText: "Yes, Log Out",
+      cancelText: "Stay Logged In",
+      variant: "warning",
+      icon: "logout",
+      onConfirm: () => {
+        localStorage.removeItem("doorstep_admin_token");
+        localStorage.removeItem("doorstep_admin_user");
+        toast.info("Logged out successfully");
+        router.push("/admin/login");
+      },
+    });
   };
 
   if (isLoginPage) {
@@ -154,17 +182,15 @@ export default function AdminLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 ${
-                  isActive
-                    ? "bg-[#2954F5] text-white shadow-md shadow-blue-500/20"
-                    : "text-gray-300 hover:text-white hover:bg-white/10"
-                }`}
+                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 ${isActive
+                  ? "bg-[#2954F5] text-white shadow-md shadow-blue-500/20"
+                  : "text-gray-300 hover:text-white hover:bg-white/10"
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <Icon
-                    className={`w-4 h-4 ${
-                      isActive ? "text-white" : "text-gray-400"
-                    }`}
+                    className={`w-4 h-4 ${isActive ? "text-white" : "text-gray-400"
+                      }`}
                   />
                   <span>{item.name}</span>
                 </div>
@@ -201,8 +227,12 @@ export default function AdminLayout({
               title="Click to view profile"
               className="flex items-center gap-2.5 group cursor-pointer"
             >
-              <div className="w-8 h-8 rounded-full bg-[#2954F5] text-white flex items-center justify-center font-bold text-xs group-hover:scale-105 transition-transform">
-                {userInitial}
+              <div className="w-8 h-8 rounded-full bg-[#2954F5] text-white flex items-center justify-center font-bold text-xs group-hover:scale-105 transition-transform overflow-hidden">
+                {adminUser?.avatar ? (
+                  <img src={adminUser.avatar} alt={adminUser.name} className="w-full h-full object-cover" />
+                ) : (
+                  userInitial
+                )}
               </div>
               <div>
                 <span className="text-xs font-bold text-white block leading-none group-hover:text-blue-300 transition-colors truncate max-w-[110px]">
@@ -277,11 +307,10 @@ export default function AdminLayout({
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold ${
-                  isActive
-                    ? "bg-[#2954F5] text-white"
-                    : "text-gray-300 hover:bg-white/10"
-                }`}
+                className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold ${isActive
+                  ? "bg-[#2954F5] text-white"
+                  : "text-gray-300 hover:bg-white/10"
+                  }`}
               >
                 <div className="flex items-center gap-3">
                   <Icon className="w-4 h-4" />
@@ -328,11 +357,6 @@ export default function AdminLayout({
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-2 text-xs font-medium text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>System Live &amp; Synced</span>
-            </div>
-
             <Link
               href="/admin/inquiries"
               className="relative p-2 rounded-lg text-gray-500 hover:text-black hover:bg-gray-100 transition-colors"
@@ -346,10 +370,14 @@ export default function AdminLayout({
 
             <Link
               href="/admin/profile"
-              className="w-8 h-8 rounded-full bg-[#2954F5] text-white flex items-center justify-center font-bold text-xs hover:ring-2 hover:ring-blue-400 transition-all cursor-pointer"
+              className="w-8 h-8 rounded-full bg-[#2954F5] text-white flex items-center justify-center font-bold text-xs hover:ring-2 hover:ring-blue-400 transition-all cursor-pointer overflow-hidden"
               title="My Profile"
             >
-              {userInitial}
+              {adminUser?.avatar ? (
+                <img src={adminUser.avatar} alt={adminUser.name} className="w-full h-full object-cover" />
+              ) : (
+                userInitial
+              )}
             </Link>
           </div>
         </header>

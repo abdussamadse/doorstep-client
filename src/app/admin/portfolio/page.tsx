@@ -26,8 +26,12 @@ import {
   useDeletePortfolio,
 } from "@/hooks/useCMS";
 import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
+import { useToast } from "@/providers/ToastProvider";
+import { useConfirm } from "@/providers/ConfirmModalProvider";
 
 export default function AdminPortfolioPage() {
+  const { toast } = useToast();
+  const confirm = useConfirm();
   const [filterCat, setFilterCat] = useState<string>("All");
   const { data: items = [], isLoading } = usePortfolios(filterCat);
   const createMutation = useCreatePortfolio();
@@ -67,9 +71,25 @@ export default function AdminPortfolioPage() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (!confirm("Are you sure you want to remove this portfolio work?")) return;
-    deleteMutation.mutate(id);
+  const handleDelete = (id: string, title?: string) => {
+    confirm({
+      title: "Delete Portfolio Project?",
+      message: `Are you sure you want to delete ${title ? `"${title}"` : "this project"}? This action will permanently remove it from your portfolio showcase.`,
+      confirmText: "Yes, Delete",
+      cancelText: "Keep Project",
+      variant: "danger",
+      icon: "trash",
+      onConfirm: () => {
+        deleteMutation.mutate(id, {
+          onSuccess: () => {
+            toast.success("Portfolio item deleted successfully!");
+          },
+          onError: () => {
+            toast.error("Failed to delete portfolio item.");
+          },
+        });
+      },
+    });
   };
 
   const handleSave = (e: React.FormEvent) => {
@@ -87,37 +107,57 @@ export default function AdminPortfolioPage() {
 
     if (editingItem) {
       // Update
-      updateMutation.mutate({
-        id: editingItem.id,
-        data: {
-          title: formTitle,
-          category: formCategory,
-          mediaType: formMediaType,
-          aspectRatio: aspect,
-          thumbnail: formThumbnail,
-          videoUrl: formMediaType === "video" ? formVideoUrl : undefined,
-          duration: formDuration || undefined,
+      updateMutation.mutate(
+        {
+          id: editingItem.id,
+          data: {
+            title: formTitle,
+            category: formCategory,
+            mediaType: formMediaType,
+            aspectRatio: aspect,
+            thumbnail: formThumbnail,
+            videoUrl: formMediaType === "video" ? formVideoUrl : undefined,
+            duration: formDuration || undefined,
+          },
         },
-      });
+        {
+          onSuccess: () => {
+            toast.success("Portfolio project updated successfully!");
+          },
+          onError: () => {
+            toast.error("Failed to update portfolio project.");
+          },
+        }
+      );
     } else {
       // Create new
-      createMutation.mutate({
-        title: formTitle,
-        category: formCategory,
-        clientType: `${formCategory} Production`,
-        summary: "Created by Doorstep Limited creative studio team.",
-        challenge: "Brand growth brief.",
-        solution: "Execution with strategic craft.",
-        tags: [formCategory],
-        results: ["100% Client Satisfaction"],
-        year: "2024",
-        color: "#1E42D0",
-        mediaType: formMediaType,
-        aspectRatio: aspect,
-        thumbnail: formThumbnail || "/img/services/creative-content.jpg",
-        videoUrl: formMediaType === "video" ? formVideoUrl || "/videos/hero.mp4" : undefined,
-        duration: formDuration || undefined,
-      });
+      createMutation.mutate(
+        {
+          title: formTitle,
+          category: formCategory,
+          clientType: `${formCategory} Production`,
+          summary: "Created by Doorstep Limited creative studio team.",
+          challenge: "Brand growth brief.",
+          solution: "Execution with strategic craft.",
+          tags: [formCategory],
+          results: ["100% Client Satisfaction"],
+          year: "2024",
+          color: "#1E42D0",
+          mediaType: formMediaType,
+          aspectRatio: aspect,
+          thumbnail: formThumbnail || "/img/services/creative-content.jpg",
+          videoUrl: formMediaType === "video" ? formVideoUrl || "/videos/hero.mp4" : undefined,
+          duration: formDuration || undefined,
+        },
+        {
+          onSuccess: () => {
+            toast.success("New portfolio project added successfully!");
+          },
+          onError: () => {
+            toast.error("Failed to add portfolio project.");
+          },
+        }
+      );
     }
 
     setIsModalOpen(false);
@@ -225,7 +265,7 @@ export default function AdminPortfolioPage() {
               </button>
 
               <button
-                onClick={() => handleDelete(item.id)}
+                onClick={() => handleDelete(item.id, item.title)}
                 className="inline-flex items-center gap-1 text-xs text-red-600 font-semibold hover:underline cursor-pointer"
               >
                 <Trash2 className="w-3.5 h-3.5" />

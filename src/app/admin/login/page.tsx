@@ -8,8 +8,8 @@ import api from "@/lib/api";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@doorstep.com");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -88,7 +88,8 @@ export default function AdminLoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@doorstep.com"
+                  placeholder="Enter your email"
+                  autoComplete="email"
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-black/30 border border-gray-700 text-white text-sm outline-none focus:border-[#2954F5] focus:ring-1 focus:ring-[#2954F5] transition-all"
                 />
               </div>
@@ -105,7 +106,8 @@ export default function AdminLoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
                   className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-black/30 border border-gray-700 text-white text-sm outline-none focus:border-[#2954F5] focus:ring-1 focus:ring-[#2954F5] transition-all"
                 />
                 <button
@@ -118,16 +120,10 @@ export default function AdminLoginPage() {
               </div>
             </div>
 
-            {/* Quick Demo Helper */}
-            <div className="p-2.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[11px] text-blue-300 flex items-center justify-between">
-              <span className="font-mono">Default: admin@doorstep.com</span>
-              <span className="font-mono bg-blue-500/20 px-1.5 py-0.5 rounded text-white">admin123</span>
-            </div>
-
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 px-4 rounded-xl bg-[#2954F5] hover:bg-[#1E42D0] active:scale-[0.99] text-white font-semibold text-xs uppercase tracking-wider transition-all duration-200 shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+              className="w-full py-3 px-4 rounded-xl bg-[#2954F5] hover:bg-[#1E42D0] active:scale-[0.99] text-white font-semibold text-xs uppercase tracking-wider transition-all duration-200 shadow-lg shadow-blue-500/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
             >
               {loading ? (
                 <>

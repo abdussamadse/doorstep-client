@@ -15,6 +15,7 @@ import {
   setStoredData,
   CMS_KEYS,
 } from "@/lib/cmsStore";
+import { PageContentData, DEFAULT_PAGE_CONTENT } from "@/data/pageContentData";
 
 /* ========================================================
    1. PORTFOLIO HOOKS
@@ -526,3 +527,45 @@ export function useDashboardStats() {
     },
   });
 }
+
+/* ========================================================
+   9. PAGE STATIC CONTENT HOOKS
+======================================================== */
+export function usePageContent() {
+  return useQuery<PageContentData>({
+    queryKey: ["page-content"],
+    queryFn: async () => {
+      try {
+        const res = await api.get("/page-content");
+        if (res.data?.success && res.data.data) {
+          return res.data.data;
+        }
+      } catch (err) {
+        console.warn("API page content fetch failed, falling back to local cache:", err);
+      }
+      return getStoredData<PageContentData>(CMS_KEYS.PAGE_CONTENT, DEFAULT_PAGE_CONTENT);
+    },
+  });
+}
+
+export function useUpdatePageContent() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (newContent: Partial<PageContentData>) => {
+      try {
+        const res = await api.put("/page-content", newContent);
+        if (res.data?.success) return res.data.data;
+      } catch (err) {
+        console.warn("API page content update failed, updating local store:", err);
+      }
+      const current = getStoredData<PageContentData>(CMS_KEYS.PAGE_CONTENT, DEFAULT_PAGE_CONTENT);
+      const merged = { ...current, ...newContent };
+      setStoredData(CMS_KEYS.PAGE_CONTENT, merged);
+      return merged;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["page-content"] });
+    },
+  });
+}
+

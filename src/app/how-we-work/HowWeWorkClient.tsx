@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { WORK_STEPS } from "@/data/agencyData";
-import { useMethodology } from "@/hooks/useCMS";
+import { useMethodology, usePageContent } from "@/hooks/useCMS";
 import {
   ArrowRight,
   CheckCircle2,
@@ -200,7 +200,9 @@ const STEP_STYLED_DESCS: Record<string, React.ReactNode> = {
 
 export default function HowWeWorkClient() {
   const { data: dynamicSteps = [] } = useMethodology();
+  const { data: pageContent } = usePageContent();
   const stepsToRender = dynamicSteps.length > 0 ? dynamicSteps : WORK_STEPS;
+  const content = pageContent?.howWeWork;
 
   return (
     <div className="space-y-16 sm:space-y-24 md:space-y-32 pb-20 sm:pb-28">
@@ -211,12 +213,10 @@ export default function HowWeWorkClient() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#12151B] leading-[1.15]">
-              Small enough to stay close, structured enough to deliver end-to-end.
+              {content?.heroTitle || "Small enough to stay close, structured enough to deliver end-to-end."}
             </h1>
             <p className="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-[#5B5F6B] max-w-2xl leading-relaxed font-normal">
-              Great marketing is not born out of guess-work. Our 4-stage process
-              bridges commercial insight with bold creative craft to build brands
-              that earn a lasting place in people’s minds.
+              {content?.heroDesc || "Great marketing is not born out of guess-work. Our 4-stage process bridges commercial insight with bold creative craft to build brands that earn a lasting place in people’s minds."}
             </p>
           </div>
         </div>
@@ -388,17 +388,17 @@ export default function HowWeWorkClient() {
 
           <div className="relative z-10 max-w-2xl space-y-3 sm:space-y-6">
             <h2 className="text-xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-snug text-white font-display">
-              Have a brief you&apos;d like to discuss?
+              {content?.ctaTitle || "Have a brief you'd like to discuss?"}
             </h2>
             <p className="text-blue-100 text-xs sm:text-base leading-relaxed font-normal">
-              Tell us about your brand challenge. We will review your goals and walk you through a tailored roadmap.
+              {content?.ctaDesc || "Tell us about your brand challenge. We will review your goals and walk you through a tailored roadmap."}
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-4">
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-4 rounded-full bg-[#E51F25] text-white font-bold text-xs sm:text-base hover:bg-[#C9181E] transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-red-500/25"
               >
-                <span>Schedule a Discovery Call</span>
+                <span>{content?.ctaButtonText || "Schedule a Discovery Call"}</span>
                 <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
               </Link>
               <a

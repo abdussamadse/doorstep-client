@@ -621,7 +621,9 @@ export const AGENCY_STATS = [
 export const AGENCY_INFO = {
   name: "Doorstep Limited",
   tagline: "Marketing & Branding Agency · Dhaka",
-  headline: "Brand and marketing work, delivered right to your doorstep.",
+  headline: "Branding & Marketing That Drives Results",
+  heroSubtitle: "For Brands and Businesses Across Bangladesh & Beyond",
+  heroVideo: "/videos/hero.mp4",
   blurb: "Doorstep Limited is a full-service marketing and branding agency in Dhaka. We build identities, run campaigns, and make the content that carries a brand from idea to shelf.",
   email: "doorstepltdofficial@gmail.com",
   phone: "+880 1785-031126",
@@ -631,6 +633,7 @@ export const AGENCY_INFO = {
     facebook: "https://facebook.com",
     instagram: "https://instagram.com",
     linkedin: "https://linkedin.com",
+    youtube: "https://youtube.com",
   },
 };
 

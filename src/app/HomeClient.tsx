@@ -8,7 +8,7 @@ import {
   ServiceItem,
   WorkStep,
 } from "@/data/agencyData";
-import { useServices, useMethodology } from "@/hooks/useCMS";
+import { useServices, useMethodology, useSettings, usePageContent } from "@/hooks/useCMS";
 import ClientLogosGrid from "@/components/ClientLogos";
 import {
   ArrowRight,
@@ -53,6 +53,13 @@ const workStepConfig = [
 export default function HomeClient() {
   const { data: dynamicServices = [] } = useServices();
   const { data: dynamicSteps = [] } = useMethodology();
+  const { data: settings } = useSettings();
+  const { data: pageContent } = usePageContent();
+
+  const homeContent = pageContent?.home;
+  const heroVideo = settings?.heroVideo || "/videos/hero.mp4";
+  const headline = settings?.headline || "Branding & Marketing That Drives Results";
+  const heroSubtitle = settings?.heroSubtitle || "For Brands and Businesses Across Bangladesh & Beyond";
 
   const servicesToRender: ServiceItem[] =
     dynamicServices.length > 0
@@ -88,6 +95,7 @@ export default function HomeClient() {
       <section className="relative w-full h-[26vh] sm:h-[36vh] md:h-[48vh] min-h-[190px] sm:min-h-[260px] max-h-[480px] flex items-center justify-center overflow-hidden border-b border-[#E3E5EC] bg-[#12151B]">
         {/* Full-Bleed Background Video */}
         <video
+          key={heroVideo}
           autoPlay
           muted
           loop
@@ -95,8 +103,11 @@ export default function HomeClient() {
           preload="auto"
           className="absolute inset-0 w-full h-full object-cover object-center"
         >
-          <source src="/videos/hero.webm" type="video/webm" />
-          <source src="/videos/hero.mp4" type="video/mp4" />
+          {heroVideo.endsWith(".webm") ? (
+            <source src={heroVideo} type="video/webm" />
+          ) : (
+            <source src={heroVideo} type="video/mp4" />
+          )}
         </video>
 
         {/* Cinematic dark tint for clean contrast */}
@@ -105,10 +116,10 @@ export default function HomeClient() {
         {/* Minimal Centered Heading */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center text-white space-y-1 sm:space-y-1.5">
           <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white drop-shadow-sm font-display leading-tight">
-            Branding &amp; Marketing That Drives Results
+            {headline}
           </h1>
           <p className="text-[11px] sm:text-sm md:text-base text-gray-200 font-normal tracking-wide">
-            For Brands and Businesses Across Bangladesh &amp; Beyond
+            {heroSubtitle}
           </p>
         </div>
       </section>
@@ -119,13 +130,13 @@ export default function HomeClient() {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl space-y-2 sm:space-y-3">
           <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#12151B] tracking-tight leading-snug">
-            We create brand experiences that inspire behavior.{" "}
+            {homeContent?.manifestoTitle || "We create brand experiences that inspire behavior."}{" "}
             <span className="block mt-0.5">
-              Spinning incredible stories – from emerging startups to household names.
+              {homeContent?.manifestoSubtitle || "Spinning incredible stories – from emerging startups to household names."}
             </span>
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-[#5B5F6B] leading-relaxed max-w-3xl font-normal">
-            Through new ways of reaching your audience, and by being an integral part of the process all the way from concept to consumer, we help transform your brand presence. We are a full-service marketing and branding agency helping brands and organizations break barriers, pushing your identity forward into the future.
+            {homeContent?.manifestoDesc || "Through new ways of reaching your audience, and by being an integral part of the process all the way from concept to consumer, we help transform your brand presence. We are a full-service marketing and branding agency helping brands and organizations break barriers, pushing your identity forward into the future."}
           </p>
         </div>
       </section>
@@ -139,10 +150,10 @@ export default function HomeClient() {
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 pb-4 sm:pb-8 border-b border-[#E3E5EC]">
               <div>
                 <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-[#12151B] tracking-tight">
-                  How We Work
+                  {homeContent?.methodologyTitle || "How We Work"}
                 </h2>
                 <p className="mt-1 text-xs sm:text-base text-[#5B5F6B] max-w-xl">
-                  Small enough to stay close to every brief, structured enough to execute it end to end.
+                  {homeContent?.methodologyDesc || "Small enough to stay close to every brief, structured enough to execute it end to end."}
                 </p>
               </div>
               <Link
@@ -204,10 +215,10 @@ export default function HomeClient() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-4 pb-3 sm:pb-5 border-b border-white/20">
               <div>
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
-                  Our Services
+                  {homeContent?.servicesTitle || "Our Services"}
                 </h2>
                 <p className="mt-1 text-xs sm:text-sm text-blue-100">
-                  Five specialized disciplines purpose-built for market impact and revenue growth.
+                  {homeContent?.servicesDesc || "Five specialized disciplines purpose-built for market impact and revenue growth."}
                 </p>
               </div>
               <Link
@@ -289,17 +300,17 @@ export default function HomeClient() {
 
           <div className="relative z-10 max-w-2xl space-y-3 sm:space-y-6">
             <h2 className="text-xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-snug text-white font-display">
-              Ready to take your brand from idea to shelf?
+              {homeContent?.ctaTitle || "Ready to take your brand from idea to shelf?"}
             </h2>
             <p className="text-blue-100 text-xs sm:text-base leading-relaxed font-normal">
-              Whether you need a complete corporate rebranding, high-conversion paid media, or tactile retail packaging, our senior team in Dhaka is ready.
+              {homeContent?.ctaDesc || "Whether you need a complete corporate rebranding, high-conversion paid media, or tactile retail packaging, our senior team in Dhaka is ready."}
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-4">
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-4 rounded-full bg-[#E51F25] text-white font-bold text-xs sm:text-base hover:bg-[#C9181E] transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-red-500/25"
               >
-                <span>Get in Touch With Us</span>
+                <span>{homeContent?.ctaButtonText || "Get in Touch With Us"}</span>
                 <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
               </Link>
               <a

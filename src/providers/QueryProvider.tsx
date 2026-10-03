@@ -3,6 +3,9 @@
 import React, { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { ToastProvider } from "./ToastProvider";
+import { ConfirmModalProvider } from "./ConfirmModalProvider";
+
 export default function QueryProvider({
   children,
 }: {
@@ -23,7 +26,11 @@ export default function QueryProvider({
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
+      <ToastProvider>
+        <ConfirmModalProvider>
+          {children}
+        </ConfirmModalProvider>
+      </ToastProvider>
     </QueryClientProvider>
   );
 }

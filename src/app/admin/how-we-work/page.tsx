@@ -4,8 +4,10 @@ import React, { useState, useEffect } from "react";
 import { WorkStep } from "@/data/agencyData";
 import { Edit2, CheckCircle2, X } from "lucide-react";
 import { useMethodology, useUpdateMethodology } from "@/hooks/useCMS";
+import { useToast } from "@/providers/ToastProvider";
 
 export default function AdminMethodologyPage() {
+  const { toast } = useToast();
   const { data: steps = [], isLoading } = useMethodology();
   const updateMutation = useUpdateMethodology();
   const [editingStep, setEditingStep] = useState<WorkStep | null>(null);
@@ -39,15 +41,25 @@ export default function AdminMethodologyPage() {
     e.preventDefault();
     if (!editingStep) return;
 
-    updateMutation.mutate({
-      step: editingStep.step,
-      data: {
-        title: formTitle,
-        tagline: formTagline,
-        desc: formDesc,
-        bulletPoints: formBullets,
+    updateMutation.mutate(
+      {
+        step: editingStep.step,
+        data: {
+          title: formTitle,
+          tagline: formTagline,
+          desc: formDesc,
+          bulletPoints: formBullets,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          toast.success(`Workflow Stage ${editingStep.step} updated successfully!`);
+        },
+        onError: () => {
+          toast.error("Failed to update workflow stage.");
+        },
+      }
+    );
 
     setEditingStep(null);
   };

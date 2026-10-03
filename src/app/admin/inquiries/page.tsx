@@ -20,8 +20,12 @@ import {
   useDeleteInquiry,
 } from "@/hooks/useCMS";
 import { InquiryItem } from "@/lib/cmsStore";
+import { useToast } from "@/providers/ToastProvider";
+import { useConfirm } from "@/providers/ConfirmModalProvider";
 
 export default function AdminInquiriesPage() {
+  const { toast } = useToast();
+  const confirm = useConfirm();
   const [statusFilter, setStatusFilter] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -30,12 +34,38 @@ export default function AdminInquiriesPage() {
   const deleteMutation = useDeleteInquiry();
 
   const handleUpdateStatus = (id: string, newStatus: InquiryItem["status"]) => {
-    updateStatusMutation.mutate({ id, status: newStatus });
+    updateStatusMutation.mutate(
+      { id, status: newStatus },
+      {
+        onSuccess: () => {
+          toast.success(`Inquiry status updated to "${newStatus}"`);
+        },
+        onError: () => {
+          toast.error("Failed to update inquiry status.");
+        },
+      }
+    );
   };
 
-  const handleDelete = (id: string) => {
-    if (!confirm("Are you sure you want to delete this inquiry?")) return;
-    deleteMutation.mutate(id);
+  const handleDelete = (id: string, clientName?: string) => {
+    confirm({
+      title: "Delete Inquiry Lead?",
+      message: `Are you sure you want to permanently delete ${clientName ? `"${clientName}'s"` : "this"} inquiry lead?`,
+      confirmText: "Yes, Delete",
+      cancelText: "Keep Lead",
+      variant: "danger",
+      icon: "trash",
+      onConfirm: () => {
+        deleteMutation.mutate(id, {
+          onSuccess: () => {
+            toast.success("Inquiry deleted successfully!");
+          },
+          onError: () => {
+            toast.error("Failed to delete inquiry.");
+          },
+        });
+      },
+    });
   };
 
   const filtered = inquiries.filter((item) => {
@@ -182,7 +212,7 @@ export default function AdminInquiriesPage() {
                   </select>
 
                   <button
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(item.id, item.name)}
                     className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 cursor-pointer"
                     title="Delete Inquiry"
                   >

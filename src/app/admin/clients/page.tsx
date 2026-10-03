@@ -4,8 +4,12 @@ import React, { useState, useEffect } from "react";
 import { PlusCircle, Trash2, X, ExternalLink } from "lucide-react";
 import { useClients, useCreateClient, useDeleteClient } from "@/hooks/useCMS";
 import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
+import { useToast } from "@/providers/ToastProvider";
+import { useConfirm } from "@/providers/ConfirmModalProvider";
 
 export default function AdminClientsPage() {
+  const { toast } = useToast();
+  const confirm = useConfirm();
   const { data: clients = [], isLoading } = useClients();
   const createMutation = useCreateClient();
   const deleteMutation = useDeleteClient();
@@ -20,17 +24,43 @@ export default function AdminClientsPage() {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (!confirm("Are you sure you want to remove this client logo?")) return;
-    deleteMutation.mutate(id);
+  const handleDelete = (id: string, name?: string) => {
+    confirm({
+      title: "Remove Client Brand?",
+      message: `Are you sure you want to remove ${name ? `"${name}"` : "this brand"} from the partner logos grid?`,
+      confirmText: "Yes, Remove",
+      cancelText: "Keep Logo",
+      variant: "danger",
+      icon: "trash",
+      onConfirm: () => {
+        deleteMutation.mutate(id, {
+          onSuccess: () => {
+            toast.success("Client logo removed successfully!");
+          },
+          onError: () => {
+            toast.error("Failed to remove client logo.");
+          },
+        });
+      },
+    });
   };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    createMutation.mutate({
-      name: formName,
-      logo: formLogo,
-    });
+    createMutation.mutate(
+      {
+        name: formName,
+        logo: formLogo,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Brand partner logo added successfully!");
+        },
+        onError: () => {
+          toast.error("Failed to add brand logo.");
+        },
+      }
+    );
     setIsModalOpen(false);
   };
 
@@ -81,7 +111,7 @@ export default function AdminClientsPage() {
               </h4>
 
               <button
-                onClick={() => handleDelete(client.id)}
+                onClick={() => handleDelete(client.id, client.name)}
                 className="mt-2 text-[11px] text-red-600 hover:text-red-700 font-semibold inline-flex items-center gap-1 cursor-pointer"
               >
                 <Trash2 className="w-3 h-3" />

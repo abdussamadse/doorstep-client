@@ -1,12 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { User, Mail, Lock, ShieldCheck, CheckCircle2, AlertCircle, Loader2, KeyRound } from "lucide-react";
+import { User, Mail, Lock, ShieldCheck, CheckCircle2, AlertCircle, Loader2, KeyRound, Trash2 } from "lucide-react";
 import api from "@/lib/api";
+import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
+import { useToast } from "@/providers/ToastProvider";
 
 export default function AdminProfilePage() {
+  const { toast } = useToast();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState("");
   const [role, setRole] = useState("admin");
 
   // Password state
@@ -30,6 +34,7 @@ export default function AdminProfilePage() {
         const u = JSON.parse(storedUser);
         setName(u.name || "");
         setEmail(u.email || "");
+        setAvatar(u.avatar || "");
         setRole(u.role || "admin");
       } catch (e) {
         console.error("Failed to parse user:", e);
@@ -41,8 +46,10 @@ export default function AdminProfilePage() {
       if (res.data?.success && res.data.user) {
         setName(res.data.user.name);
         setEmail(res.data.user.email);
+        setAvatar(res.data.user.avatar || "");
         setRole(res.data.user.role);
         localStorage.setItem("doorstep_admin_user", JSON.stringify(res.data.user));
+        window.dispatchEvent(new Event("admin-profile-updated"));
       }
     }).catch((err) => {
       console.warn("Could not fetch remote profile:", err);
@@ -56,16 +63,20 @@ export default function AdminProfilePage() {
     setProfileSuccess(null);
 
     try {
-      const res = await api.put("/auth/profile", { name, email });
+      const res = await api.put("/auth/profile", { name, email, avatar });
       if (res.data?.success) {
         setProfileSuccess("Profile details updated successfully!");
+        toast.success("Admin profile updated successfully!");
         localStorage.setItem("doorstep_admin_user", JSON.stringify(res.data.user));
+        window.dispatchEvent(new Event("admin-profile-updated"));
         setTimeout(() => setProfileSuccess(null), 3000);
       } else {
         throw new Error(res.data?.message || "Failed to update profile");
       }
     } catch (err: any) {
-      setProfileError(err.response?.data?.message || err?.message || "Error updating profile");
+      const msg = err.response?.data?.message || err?.message || "Error updating profile";
+      setProfileError(msg);
+      toast.error(msg);
     } finally {
       setProfileLoading(false);
     }
@@ -78,13 +89,17 @@ export default function AdminProfilePage() {
     setPasswordSuccess(null);
 
     if (newPassword !== confirmPassword) {
-      setPasswordError("New password and confirm password do not match");
+      const msg = "New password and confirm password do not match";
+      setPasswordError(msg);
+      toast.error(msg);
       setPasswordLoading(false);
       return;
     }
 
     if (newPassword.length < 6) {
-      setPasswordError("New password must be at least 6 characters");
+      const msg = "New password must be at least 6 characters";
+      setPasswordError(msg);
+      toast.error(msg);
       setPasswordLoading(false);
       return;
     }
@@ -93,6 +108,7 @@ export default function AdminProfilePage() {
       const res = await api.put("/auth/password", { currentPassword, newPassword });
       if (res.data?.success) {
         setPasswordSuccess("Password changed successfully!");
+        toast.success("Security password changed successfully!");
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
@@ -101,7 +117,9 @@ export default function AdminProfilePage() {
         throw new Error(res.data?.message || "Failed to change password");
       }
     } catch (err: any) {
-      setPasswordError(err.response?.data?.message || err?.message || "Error changing password");
+      const msg = err.response?.data?.message || err?.message || "Error changing password";
+      setPasswordError(msg);
+      toast.error(msg);
     } finally {
       setPasswordLoading(false);
     }
@@ -159,6 +177,62 @@ export default function AdminProfilePage() {
           )}
 
           <form onSubmit={handleUpdateProfile} className="space-y-4">
+            {/* Profile Picture Uploader */}
+            <div className="space-y-3 pb-4 border-b border-[#F4F6F9]">
+              <label className="block text-xs font-bold uppercase text-[#12151B]">
+                Profile Picture
+              </label>
+
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-full border-2 border-[#E3E5EC] overflow-hidden bg-gray-100 flex items-center justify-center shrink-0 shadow-xs">
+                  {avatar ? (
+                    <img
+                      src={avatar}
+                      alt={name || "Admin"}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-xl font-bold text-[#2954F5]">
+                      {name ? name.charAt(0).toUpperCase() : "A"}
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex-1 space-y-2">
+                  <CloudinaryUploader
+                    label="Upload Avatar Photo"
+                    folder="doorstep/admin"
+                    accept="image/*"
+                    onUploadSuccess={(url) => setAvatar(url)}
+                  />
+
+                  {avatar && (
+                    <button
+                      type="button"
+                      onClick={() => setAvatar("")}
+                      className="inline-flex items-center gap-1 text-xs text-red-600 hover:text-red-700 font-semibold cursor-pointer"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Remove Photo</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-gray-500 mb-1">
+                  Or Direct Image URL
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://... or /img/..."
+                  value={avatar}
+                  onChange={(e) => setAvatar(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl border border-[#E3E5EC] text-xs outline-none focus:border-[#2954F5]"
+                />
+              </div>
+            </div>
+
             <div>
               <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
                 Full Name *

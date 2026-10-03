@@ -3,12 +3,14 @@
 import React from "react";
 import Link from "next/link";
 import { TEAM_MEMBERS } from "@/data/agencyData";
-import { useTeam } from "@/hooks/useCMS";
+import { useTeam, usePageContent } from "@/hooks/useCMS";
 import { ArrowRight } from "lucide-react";
 
 export default function OurTeamClient() {
   const { data: dynamicTeam = [] } = useTeam();
+  const { data: pageContent } = usePageContent();
   const teamToRender = dynamicTeam.length > 0 ? dynamicTeam : TEAM_MEMBERS;
+  const content = pageContent?.ourTeam;
 
   return (
     <div className="space-y-16 sm:space-y-24 md:space-y-32 pb-20 sm:pb-28">
@@ -19,10 +21,10 @@ export default function OurTeamClient() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl">
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#12151B] leading-[1.15]">
-              A small, senior team that stays on your account from start to finish.
+              {content?.heroTitle || "A small, senior team that stays on your account from start to finish."}
             </h1>
             <p className="mt-5 sm:mt-6 text-sm sm:text-base md:text-lg text-[#5B5F6B] max-w-2xl leading-relaxed font-normal">
-              We are built as a specialized studio rather than a bloated agency. You get direct access to creative thinkers, strategists, and executors who care about your brand as much as you do.
+              {content?.heroDesc || "We are built as a specialized studio rather than a bloated agency. You get direct access to creative thinkers, strategists, and executors who care about your brand as much as you do."}
             </p>
           </div>
         </div>
@@ -34,10 +36,10 @@ export default function OurTeamClient() {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mb-8 sm:mb-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#12151B] tracking-tight">
-            Studio Leadership &amp; Function Leads
+            {content?.sectionTitle || "Studio Leadership & Function Leads"}
           </h2>
           <p className="mt-1.5 text-xs sm:text-sm md:text-base text-[#5B5F6B]">
-            Every core service is spearheaded by a dedicated practice lead.
+            {content?.sectionDesc || "Every core service is spearheaded by a dedicated practice lead."}
           </p>
         </div>
 
@@ -103,17 +105,17 @@ export default function OurTeamClient() {
 
           <div className="relative z-10 max-w-2xl space-y-3 sm:space-y-6">
             <h2 className="text-xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-snug text-white font-display">
-              Put our team to work on your brand.
+              {content?.ctaTitle || "Put our team to work on your brand."}
             </h2>
             <p className="text-blue-100 text-xs sm:text-base leading-relaxed font-normal">
-              Get in touch today to schedule an initial consultation with our managing director and creative lead.
+              {content?.ctaDesc || "Get in touch today to schedule an initial consultation with our managing director and creative lead."}
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-4">
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-4 rounded-full bg-[#E51F25] text-white font-bold text-xs sm:text-base hover:bg-[#C9181E] transition-all transform hover:-translate-y-0.5 shadow-lg hover:shadow-red-500/25"
               >
-                <span>Get in Touch With Us</span>
+                <span>{content?.ctaButtonText || "Get in Touch With Us"}</span>
                 <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
               </Link>
               <a

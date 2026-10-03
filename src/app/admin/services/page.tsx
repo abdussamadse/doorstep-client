@@ -4,8 +4,10 @@ import React, { useState, useEffect } from "react";
 import { ServiceItem } from "@/data/agencyData";
 import { Edit2, Plus, Trash2, CheckCircle2, Save, X } from "lucide-react";
 import { useServices, useUpdateService } from "@/hooks/useCMS";
+import { useToast } from "@/providers/ToastProvider";
 
 export default function AdminServicesPage() {
+  const { toast } = useToast();
   const { data: services = [], isLoading } = useServices();
   const updateMutation = useUpdateService();
   const [editingService, setEditingService] = useState<ServiceItem | null>(null);
@@ -52,16 +54,26 @@ export default function AdminServicesPage() {
     e.preventDefault();
     if (!editingService) return;
 
-    updateMutation.mutate({
-      id: editingService.id,
-      data: {
-        name: formName,
-        shortDesc: formShortDesc,
-        description: formDescription,
-        deliverables: formDeliverables,
-        tags: formTags,
+    updateMutation.mutate(
+      {
+        id: editingService.id,
+        data: {
+          name: formName,
+          shortDesc: formShortDesc,
+          description: formDescription,
+          deliverables: formDeliverables,
+          tags: formTags,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          toast.success(`Service "${formName}" updated successfully!`);
+        },
+        onError: () => {
+          toast.error("Failed to update service.");
+        },
+      }
+    );
 
     setEditingService(null);
   };
