@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { UploadCloud, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api";
 
 interface CloudinaryUploaderProps {
   label?: string;
@@ -35,9 +36,18 @@ export default function CloudinaryUploader({
       formData.append("file", file);
       formData.append("folder", folder);
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-      const res = await fetch(`${apiUrl}/api/upload`, {
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("doorstep_admin_token")
+          : null;
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      const res = await fetch(`${API_BASE_URL}/upload`, {
         method: "POST",
+        headers,
         body: formData,
       });
 
