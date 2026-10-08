@@ -635,6 +635,8 @@ export const AGENCY_INFO = {
     linkedin: "https://linkedin.com",
     youtube: "https://youtube.com",
   },
+  fbPixelId: "",
+  googleAnalyticsId: "",
 };
 
 export type AgencyInfo = typeof AGENCY_INFO;

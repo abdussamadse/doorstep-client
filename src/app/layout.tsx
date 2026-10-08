@@ -50,6 +50,7 @@ export const metadata: Metadata = {
 
 import QueryProvider from "@/providers/QueryProvider";
 import SiteShell from "@/components/SiteShell";
+import AnalyticsTracker from "@/components/AnalyticsTracker";
 
 export default function RootLayout({
   children,
@@ -60,6 +61,7 @@ export default function RootLayout({
     <html lang="en" className={`${spaceGrotesk.variable} ${inter.variable} light`}>
       <body className="min-h-screen flex flex-col bg-[#FDFDFC] text-[#12151B] antialiased selection:bg-[#2954F5]/10 selection:text-[#2954F5]">
         <QueryProvider>
+          <AnalyticsTracker />
           <SiteShell>{children}</SiteShell>
         </QueryProvider>
       </body>

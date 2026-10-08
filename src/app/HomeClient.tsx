@@ -58,8 +58,6 @@ export default function HomeClient() {
 
   const homeContent = pageContent?.home;
   const heroVideo = settings?.heroVideo || "/videos/hero.mp4";
-  const headline = settings?.headline || "Branding & Marketing That Drives Results";
-  const heroSubtitle = settings?.heroSubtitle || "For Brands and Businesses Across Bangladesh & Beyond";
 
   const servicesToRender: ServiceItem[] =
     dynamicServices.length > 0
@@ -90,7 +88,7 @@ export default function HomeClient() {
   return (
     <div className="space-y-10 sm:space-y-16 md:space-y-20 pb-16 sm:pb-20">
       {/* ========================================================
-          1. CINEMATIC VIDEO BANNER (COMPACT & MINIMAL)
+          1. CINEMATIC VIDEO BANNER (CLEAN & FULL-BLEED)
       ======================================================== */}
       <section className="relative w-full h-[26vh] sm:h-[36vh] md:h-[48vh] min-h-[190px] sm:min-h-[260px] max-h-[480px] flex items-center justify-center overflow-hidden border-b border-[#E3E5EC] bg-[#12151B]">
         {/* Full-Bleed Background Video */}
@@ -109,19 +107,6 @@ export default function HomeClient() {
             <source src={heroVideo} type="video/mp4" />
           )}
         </video>
-
-        {/* Cinematic dark tint for clean contrast */}
-        <div className="absolute inset-0 bg-black/45 pointer-events-none" />
-
-        {/* Minimal Centered Heading */}
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center text-white space-y-1 sm:space-y-1.5">
-          <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white drop-shadow-sm font-display leading-tight">
-            {headline}
-          </h1>
-          <p className="text-[11px] sm:text-sm md:text-base text-gray-200 font-normal tracking-wide">
-            {heroSubtitle}
-          </p>
-        </div>
       </section>
 
       {/* ========================================================
@@ -129,12 +114,12 @@ export default function HomeClient() {
       ======================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl space-y-2 sm:space-y-3">
-          <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#12151B] tracking-tight leading-snug">
+          <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#12151B] tracking-tight leading-snug">
             {homeContent?.manifestoTitle || "We create brand experiences that inspire behavior."}{" "}
-            <span className="block mt-0.5">
+            <span className="block mt-0.5 font-normal text-[#5B5F6B]">
               {homeContent?.manifestoSubtitle || "Spinning incredible stories – from emerging startups to household names."}
             </span>
-          </h2>
+          </h1>
           <p className="text-xs sm:text-sm md:text-base text-[#5B5F6B] leading-relaxed max-w-3xl font-normal">
             {homeContent?.manifestoDesc || "Through new ways of reaching your audience, and by being an integral part of the process all the way from concept to consumer, we help transform your brand presence. We are a full-service marketing and branding agency helping brands and organizations break barriers, pushing your identity forward into the future."}
           </p>

@@ -36,7 +36,7 @@ export default function ClientLogosGrid() {
     : CLIENT_LOGOS;
 
   return (
-    <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3.5 lg:gap-5">
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2.5 sm:gap-3.5 lg:gap-4">
       {listToRender.map((brand, idx) => {
         const hoverBorder =
           brand.theme === "red"
@@ -50,12 +50,12 @@ export default function ClientLogosGrid() {
         return (
           <div
             key={idx}
-            className={`w-full bg-white rounded-lg sm:rounded-xl md:rounded-2xl border border-[#E3E5EC] p-2 sm:p-3.5 lg:p-5 flex items-center justify-center aspect-square shadow-xs ${hoverBorder} ${hoverShadow} hover:-translate-y-0.5 sm:hover:-translate-y-1 transition-all duration-300 group cursor-pointer overflow-hidden`}
+            className={`w-full bg-white rounded-xl sm:rounded-2xl border border-[#E3E5EC] p-1.5 sm:p-2 md:p-2.5 flex items-center justify-center aspect-square shadow-xs ${hoverBorder} ${hoverShadow} hover:-translate-y-0.5 sm:hover:-translate-y-1 transition-all duration-300 group cursor-pointer overflow-hidden`}
           >
             <img
               src={brand.src}
               alt={brand.name}
-              className="max-h-7 sm:max-h-10 md:max-h-12 lg:max-h-16 w-auto max-w-[85%] object-contain transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 select-none"
               loading="lazy"
             />
           </div>

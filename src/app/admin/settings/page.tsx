@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { AgencyInfo } from "@/data/agencyData";
-import { Save, Check, Building, Phone, Mail, MapPin, Globe, Video, Film, RefreshCw } from "lucide-react";
+import { Save, Check, Building, Phone, Mail, MapPin, Globe, Video, Film, RefreshCw, BarChart3, Activity } from "lucide-react";
 import { useSettings, useUpdateSettings } from "@/hooks/useCMS";
 import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
 import { useToast } from "@/providers/ToastProvider";
@@ -26,6 +26,8 @@ export default function AdminSettingsPage() {
   const [instagram, setInstagram] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [youtube, setYoutube] = useState("");
+  const [fbPixelId, setFbPixelId] = useState("");
+  const [googleAnalyticsId, setGoogleAnalyticsId] = useState("");
 
   useEffect(() => {
     if (settings) {
@@ -41,6 +43,8 @@ export default function AdminSettingsPage() {
       setInstagram(settings.social?.instagram || "");
       setLinkedin(settings.social?.linkedin || "");
       setYoutube(settings.social?.youtube || "");
+      setFbPixelId(settings.fbPixelId || "");
+      setGoogleAnalyticsId(settings.googleAnalyticsId || "");
     }
   }, [settings]);
 
@@ -63,6 +67,8 @@ export default function AdminSettingsPage() {
           linkedin,
           youtube,
         },
+        fbPixelId: fbPixelId.trim(),
+        googleAnalyticsId: googleAnalyticsId.trim(),
       },
       {
         onSuccess: () => {
@@ -370,6 +376,116 @@ export default function AdminSettingsPage() {
                   className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5]"
                 />
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Marketing Analytics & Tracking (Facebook Pixel & Google Analytics) */}
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-[#E3E5EC] space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#E3E5EC] gap-2">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-[#2954F5]">
+                <BarChart3 className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-base sm:text-lg font-bold text-[#12151B]">
+                  Marketing Analytics &amp; Tracking
+                </h2>
+                <p className="text-xs text-[#5B5F6B]">
+                  Connect Meta (Facebook) Pixel &amp; Google Analytics to track visitor events &amp; ads performance.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-xs">
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-medium ${fbPixelId.trim() ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-gray-100 text-gray-500"}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${fbPixelId.trim() ? "bg-emerald-500" : "bg-gray-400"}`} />
+                Pixel: {fbPixelId.trim() ? "Active" : "Off"}
+              </span>
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-medium ${googleAnalyticsId.trim() ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-gray-100 text-gray-500"}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${googleAnalyticsId.trim() ? "bg-emerald-500" : "bg-gray-400"}`} />
+                GA4: {googleAnalyticsId.trim() ? "Active" : "Off"}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Facebook Pixel */}
+            <div className="p-4 sm:p-5 rounded-xl border border-gray-100 bg-gradient-to-br from-white to-blue-50/20 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#1877F2]/10 text-[#1877F2] flex items-center justify-center font-bold text-xs">
+                    f
+                  </div>
+                  <label className="text-xs font-bold uppercase tracking-wide text-[#12151B]">
+                    Meta / Facebook Pixel ID
+                  </label>
+                </div>
+                {fbPixelId.trim() ? (
+                  <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                    Connected
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-semibold text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full">
+                    Not configured
+                  </span>
+                )}
+              </div>
+
+              <input
+                type="text"
+                placeholder="e.g. 123456789012345"
+                value={fbPixelId}
+                onChange={(e) => setFbPixelId(e.target.value)}
+                className="w-full text-xs sm:text-sm font-mono border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white transition-all shadow-sm"
+              />
+
+              <p className="text-[11px] leading-relaxed text-[#5B5F6B]">
+                Enter your 15–16 digit Pixel ID from Meta Events Manager. Automatically tracks page views and SPA client route changes.
+              </p>
+            </div>
+
+            {/* Google Analytics */}
+            <div className="p-4 sm:p-5 rounded-xl border border-gray-100 bg-gradient-to-br from-white to-amber-50/20 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-[#EA4335]/10 text-[#EA4335] flex items-center justify-center">
+                    <Activity className="w-4 h-4" />
+                  </div>
+                  <label className="text-xs font-bold uppercase tracking-wide text-[#12151B]">
+                    Google Analytics (GA4) ID
+                  </label>
+                </div>
+                {googleAnalyticsId.trim() ? (
+                  <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                    Connected
+                  </span>
+                ) : (
+                  <span className="text-[10px] font-semibold text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full">
+                    Not configured
+                  </span>
+                )}
+              </div>
+
+              <input
+                type="text"
+                placeholder="e.g. G-ABC123XYZ0"
+                value={googleAnalyticsId}
+                onChange={(e) => setGoogleAnalyticsId(e.target.value)}
+                className="w-full text-xs sm:text-sm font-mono border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white transition-all shadow-sm"
+              />
+
+              <p className="text-[11px] leading-relaxed text-[#5B5F6B]">
+                Enter your GA4 Measurement ID (starts with <span className="font-semibold text-gray-700">G-</span>) from Google Analytics Data Streams.
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Notice / Tips */}
+          <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 text-xs text-[#5B5F6B] flex items-start gap-2.5">
+            <span className="text-[#2954F5] font-bold text-sm leading-none mt-0.5">ℹ</span>
+            <div className="space-y-0.5 leading-relaxed">
+              <span className="font-semibold text-[#12151B]">Dynamic &amp; Non-intrusive Injection:</span>{" "}
+              Analytics scripts are only loaded in the visitor&apos;s browser when an ID is provided. Both scripts automatically record SPA route navigation across all pages without requiring page reloads.
             </div>
           </div>
         </div>
