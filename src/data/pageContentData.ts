@@ -44,9 +44,9 @@ export interface PageContentData {
 
 export const DEFAULT_PAGE_CONTENT: PageContentData = {
   home: {
-    manifestoTitle: "We create brand experiences that inspire behavior.",
+    manifestoTitle: "We Build Brands That Stand Out",
     manifestoSubtitle:
-      "Spinning incredible stories – from emerging startups to household names.",
+      "Turning ideas into distinctive brands, meaningful connections and measurable growth",
     manifestoDesc:
       "Through new ways of reaching your audience, and by being an integral part of the process all the way from concept to consumer, we help transform your brand presence. We are a full-service marketing and branding agency helping brands and organizations break barriers, pushing your identity forward into the future.",
     servicesTitle: "Integrated Capabilities for Brand Dominance",

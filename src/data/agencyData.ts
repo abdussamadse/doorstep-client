@@ -637,6 +637,15 @@ export const AGENCY_INFO = {
   },
   fbPixelId: "",
   googleAnalyticsId: "",
+  seo: {
+    metaTitle: "Doorstep Limited - Marketing & Branding Agency Dhaka",
+    metaDescription:
+      "Full-service branding, digital marketing, creative content, packaging, and strategy agency in Dhaka, Bangladesh.",
+    keywords: "branding, digital marketing, creative agency, packaging design, Dhaka, Bangladesh",
+    canonicalUrl: "https://doorstepltdbd.com/",
+    ogImage: "",
+    noIndex: false,
+  },
 };
 
 export type AgencyInfo = typeof AGENCY_INFO;

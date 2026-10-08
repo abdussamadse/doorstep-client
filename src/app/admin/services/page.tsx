@@ -1,82 +1,108 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ServiceItem } from "@/data/agencyData";
-import { Edit2, Plus, Trash2, CheckCircle2, Save, X } from "lucide-react";
-import { useServices, useUpdateService } from "@/hooks/useCMS";
+import { Edit2, Plus, Trash2, Save, X, AlertTriangle } from "lucide-react";
+import { useServices, useCreateService, useUpdateService, useDeleteService } from "@/hooks/useCMS";
 import { useToast } from "@/providers/ToastProvider";
+import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
 
 export default function AdminServicesPage() {
   const { toast } = useToast();
   const { data: services = [], isLoading } = useServices();
+  const createMutation = useCreateService();
   const updateMutation = useUpdateService();
-  const [editingService, setEditingService] = useState<ServiceItem | null>(null);
+  const deleteMutation = useDeleteService();
 
-  // Form Fields
+  // Modal States
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [editingService, setEditingService] = useState<ServiceItem | null>(null);
+  const [deletingService, setDeletingService] = useState<ServiceItem | null>(null);
+
+  // Form Fields - exactly matching what the website displays: Title, Subtitle, Image
   const [formName, setFormName] = useState("");
   const [formShortDesc, setFormShortDesc] = useState("");
-  const [formDescription, setFormDescription] = useState("");
-  const [formDeliverables, setFormDeliverables] = useState<string[]>([]);
-  const [formTags, setFormTags] = useState<string[]>([]);
-  const [newDeliverable, setNewDeliverable] = useState("");
-  const [newTag, setNewTag] = useState("");
+  const [formImage, setFormImage] = useState("");
+
+  const handleOpenCreate = () => {
+    setFormName("");
+    setFormShortDesc("");
+    setFormImage("/img/services/creative-content.jpg");
+    setIsCreateOpen(true);
+  };
 
   const handleOpenEdit = (service: ServiceItem) => {
     setEditingService(service);
-    setFormName(service.name);
-    setFormShortDesc(service.shortDesc);
-    setFormDescription(service.description);
-    setFormDeliverables([...service.deliverables]);
-    setFormTags([...service.tags]);
-  };
-
-  const handleAddDeliverable = () => {
-    if (!newDeliverable.trim()) return;
-    setFormDeliverables([...formDeliverables, newDeliverable.trim()]);
-    setNewDeliverable("");
-  };
-
-  const handleRemoveDeliverable = (idx: number) => {
-    setFormDeliverables(formDeliverables.filter((_, i) => i !== idx));
-  };
-
-  const handleAddTag = () => {
-    if (!newTag.trim()) return;
-    setFormTags([...formTags, newTag.trim()]);
-    setNewTag("");
-  };
-
-  const handleRemoveTag = (idx: number) => {
-    setFormTags(formTags.filter((_, i) => i !== idx));
+    setFormName(service.name || "");
+    setFormShortDesc(service.shortDesc || "");
+    setFormImage(service.image || "/img/services/creative-content.jpg");
   };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingService) return;
 
-    updateMutation.mutate(
-      {
-        id: editingService.id,
-        data: {
-          name: formName,
-          shortDesc: formShortDesc,
-          description: formDescription,
-          deliverables: formDeliverables,
-          tags: formTags,
+    if (isCreateOpen) {
+      createMutation.mutate(
+        {
+          name: formName.trim(),
+          shortDesc: formShortDesc.trim(),
+          image: formImage.trim() || "/img/services/creative-content.jpg",
+          description: "",
+          deliverables: [],
+          tags: [],
+          icon: "Briefcase",
         },
-      },
-      {
-        onSuccess: () => {
-          toast.success(`Service "${formName}" updated successfully!`);
+        {
+          onSuccess: () => {
+            toast.success(`Capability "${formName}" created successfully!`);
+            setIsCreateOpen(false);
+          },
+          onError: () => {
+            toast.error("Failed to create capability. Please try again.");
+          },
+        }
+      );
+    } else if (editingService) {
+      updateMutation.mutate(
+        {
+          id: editingService.id,
+          data: {
+            name: formName.trim(),
+            shortDesc: formShortDesc.trim(),
+            image: formImage.trim(),
+            description: editingService.description || "",
+            deliverables: editingService.deliverables || [],
+            tags: editingService.tags || [],
+          },
         },
-        onError: () => {
-          toast.error("Failed to update service.");
-        },
-      }
-    );
-
-    setEditingService(null);
+        {
+          onSuccess: () => {
+            toast.success(`Capability "${formName}" updated successfully!`);
+            setEditingService(null);
+          },
+          onError: () => {
+            toast.error("Failed to update capability. Please try again.");
+          },
+        }
+      );
+    }
   };
+
+  const handleConfirmDelete = () => {
+    if (!deletingService) return;
+
+    deleteMutation.mutate(deletingService.id, {
+      onSuccess: () => {
+        toast.success(`Capability "${deletingService.name}" removed successfully!`);
+        setDeletingService(null);
+      },
+      onError: () => {
+        toast.error("Failed to delete capability. Please try again.");
+      },
+    });
+  };
+
+  const isModalOpen = isCreateOpen || !!editingService;
 
   return (
     <div className="space-y-8">
@@ -84,72 +110,79 @@ export default function AdminServicesPage() {
       <div className="bg-white p-6 rounded-2xl border border-[#E3E5EC] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-[#2954F5] text-xs font-bold uppercase tracking-wider block mb-1">
-            Service Solutions
+            Home Page Capabilities
           </span>
-          <h1 className="text-2xl font-bold text-[#12151B]">Core Services CMS</h1>
+          <h1 className="text-2xl font-bold text-[#12151B]">
+            Capabilities &amp; Services CMS
+          </h1>
           <p className="text-xs sm:text-sm text-[#5B5F6B]">
-            Edit titles, commercial descriptions, key deliverables, and tags for your agency capabilities.
+            Manage, add, and remove capability cards shown under &ldquo;Integrated Capabilities for Brand Dominance&rdquo; on the Home Page.
           </p>
+        </div>
+
+        <div className="flex items-center gap-3 self-start sm:self-auto">
+          <span className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-blue-50 text-[#2954F5] border border-blue-100 hidden sm:inline-block">
+            {services.length} Active
+          </span>
+          <button
+            onClick={handleOpenCreate}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#2954F5] text-white text-xs sm:text-sm font-semibold hover:bg-[#1E42D0] transition-colors shadow-md cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Capability</span>
+          </button>
         </div>
       </div>
 
-      {/* Services List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Services Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
         {services.map((service, sIdx) => (
           <div
             key={service.id}
-            className="bg-white rounded-2xl border border-[#E3E5EC] p-6 space-y-4 hover:border-gray-400 transition-all shadow-xs flex flex-col justify-between"
+            className="bg-white rounded-2xl border border-[#E3E5EC] overflow-hidden hover:border-[#2954F5] transition-all shadow-xs flex flex-col justify-between group"
           >
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-[#2954F5] bg-[#2954F5]/10 px-2.5 py-1 rounded">
-                  Service 0{sIdx + 1}
+            {/* Card Image Banner */}
+            <div className="w-full aspect-[16/10] bg-gray-900 relative overflow-hidden">
+              <img
+                src={service.image || "/img/services/creative-content.jpg"}
+                alt={service.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute top-3 left-3">
+                <span className="text-[11px] font-mono font-bold bg-black/60 text-white backdrop-blur-xs px-2.5 py-1 rounded-md">
+                  0{sIdx + 1}
                 </span>
-                <button
-                  onClick={() => handleOpenEdit(service)}
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2954F5] hover:underline cursor-pointer"
-                >
-                  <Edit2 className="w-3.5 h-3.5" />
-                  <span>Edit Details</span>
-                </button>
               </div>
+            </div>
 
+            {/* Card Content: Title & Subtitle */}
+            <div className="p-5 flex flex-col grow justify-between gap-4">
               <div>
-                <h3 className="text-lg font-bold text-[#12151B]">{service.name}</h3>
-                <p className="text-xs font-semibold text-[#E51F25] mt-0.5">
+                <h3 className="text-base sm:text-lg font-bold text-[#12151B] group-hover:text-[#2954F5] transition-colors">
+                  {service.name}
+                </h3>
+                <p className="text-xs font-semibold text-[#E51F25] uppercase tracking-wider mt-1">
                   {service.shortDesc}
                 </p>
               </div>
 
-              <p className="text-xs sm:text-sm text-[#5B5F6B] leading-relaxed">
-                {service.description}
-              </p>
+              {/* Action Buttons: Edit and Delete */}
+              <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
+                <button
+                  onClick={() => setDeletingService(service)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-red-600 hover:bg-red-50 text-xs font-semibold transition-colors cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete</span>
+                </button>
 
-              {/* Deliverables */}
-              <div className="pt-3 border-t border-[#F4F5F8] space-y-2">
-                <span className="text-[10px] font-bold uppercase text-[#12151B] block">
-                  Key Deliverables ({service.deliverables.length})
-                </span>
-                <ul className="space-y-1">
-                  {service.deliverables.map((item, dIdx) => (
-                    <li key={dIdx} className="flex items-center gap-2 text-xs text-[#5B5F6B]">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#2954F5] shrink-0" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1.5 pt-2">
-                {service.tags.map((tag, tIdx) => (
-                  <span
-                    key={tIdx}
-                    className="text-[10px] font-medium bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full"
-                  >
-                    #{tag}
-                  </span>
-                ))}
+                <button
+                  onClick={() => handleOpenEdit(service)}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#2954F5]/10 text-[#2954F5] hover:bg-[#2954F5] hover:text-white transition-all text-xs font-semibold cursor-pointer"
+                >
+                  <Edit2 className="w-3.5 h-3.5" />
+                  <span>Edit</span>
+                </button>
               </div>
             </div>
           </div>
@@ -157,17 +190,26 @@ export default function AdminServicesPage() {
       </div>
 
       {/* ========================================================
-          EDIT SERVICE MODAL
+          CREATE / EDIT CAPABILITY MODAL
       ======================================================== */}
-      {editingService && (
+      {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-[#E3E5EC] max-h-[90vh] overflow-y-auto space-y-5">
+          <div className="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-[#E3E5EC] max-h-[92vh] overflow-y-auto space-y-5 animate-in fade-in">
+            {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-[#E3E5EC] pb-3">
-              <h2 className="text-lg font-bold text-[#12151B]">
-                Edit: {editingService.name}
-              </h2>
+              <div>
+                <span className="text-[11px] font-bold text-[#2954F5] uppercase tracking-wider block">
+                  {isCreateOpen ? "Create New" : "Edit Existing"}
+                </span>
+                <h2 className="text-lg font-bold text-[#12151B]">
+                  {isCreateOpen ? "Add New Capability" : `Edit: ${editingService?.name}`}
+                </h2>
+              </div>
               <button
-                onClick={() => setEditingService(null)}
+                onClick={() => {
+                  setIsCreateOpen(false);
+                  setEditingService(null);
+                }}
                 className="p-1 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-black cursor-pointer"
               >
                 <X className="w-5 h-5" />
@@ -175,141 +217,168 @@ export default function AdminServicesPage() {
             </div>
 
             <form onSubmit={handleSave} className="space-y-4">
+              {/* 1. Service Title */}
               <div>
                 <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
-                  Service Title *
+                  1. Service Title (Name) *
                 </label>
                 <input
                   type="text"
                   required
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5]"
+                  placeholder="e.g. Digital Marketing"
+                  className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white transition-all shadow-xs"
                 />
               </div>
 
+              {/* 2. Service Subtitle */}
               <div>
                 <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
-                  Short Tagline *
+                  2. Service Subtitle (Short Tagline) *
                 </label>
                 <input
                   type="text"
                   required
                   value={formShortDesc}
                   onChange={(e) => setFormShortDesc(e.target.value)}
-                  className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5]"
+                  placeholder="e.g. Social Media, Content"
+                  className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white transition-all shadow-xs"
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
-                  Detailed Description *
+              {/* 3. Service Image */}
+              <div className="space-y-2">
+                <label className="block text-xs font-bold uppercase text-[#12151B]">
+                  3. Service Image *
                 </label>
-                <textarea
-                  rows={3}
-                  required
-                  value={formDescription}
-                  onChange={(e) => setFormDescription(e.target.value)}
-                  className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5]"
-                />
-              </div>
 
-              {/* Deliverables Editor */}
-              <div>
-                <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
-                  Deliverables
-                </label>
-                <div className="space-y-2 mb-2">
-                  {formDeliverables.map((deliv, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between p-2 rounded-lg bg-gray-50 border border-[#E3E5EC] text-xs"
-                    >
-                      <span>{deliv}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveDeliverable(idx)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
+                <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+                  <div className="flex-1 w-full">
+                    <input
+                      type="text"
+                      required
+                      value={formImage}
+                      onChange={(e) => setFormImage(e.target.value)}
+                      placeholder="https://res.cloudinary.com/... or /img/services/..."
+                      className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white shadow-xs"
+                    />
+                  </div>
+                  <div className="shrink-0">
+                    <CloudinaryUploader
+                      label="Upload New Image"
+                      accept="image/*"
+                      folder="doorstep/services"
+                      onUploadSuccess={(url) => setFormImage(url)}
+                    />
+                  </div>
+                </div>
+
+                {/* Live Card Preview (as shown on Home Page #services) */}
+                <div className="pt-2">
+                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide block mb-1.5">
+                    Live Home Page Card Preview:
+                  </span>
+                  <div className="bg-[#111420] rounded-xl overflow-hidden border border-white/15 max-w-sm mx-auto shadow-lg">
+                    <div className="w-full aspect-[16/10] bg-black/40 relative overflow-hidden">
+                      {formImage ? (
+                        <img
+                          src={formImage}
+                          alt={formName || "Preview"}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
+                          No Image Selected
+                        </div>
+                      )}
                     </div>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newDeliverable}
-                    onChange={(e) => setNewDeliverable(e.target.value)}
-                    placeholder="New deliverable item..."
-                    className="flex-1 text-xs border border-[#E3E5EC] rounded-xl px-3 py-2 outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddDeliverable}
-                    className="px-3 py-2 bg-[#2954F5] text-white text-xs font-semibold rounded-xl hover:bg-[#1E42D0]"
-                  >
-                    Add
-                  </button>
+                    <div className="p-3.5 text-center">
+                      <h4 className="text-white font-bold text-sm truncate">
+                        {formName || "Service Title Preview"}
+                      </h4>
+                      <p className="text-[10px] font-semibold text-blue-200/80 uppercase tracking-wider mt-1 truncate">
+                        {formShortDesc || "Short subtitle preview"}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Tags Editor */}
-              <div>
-                <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
-                  Tags
-                </label>
-                <div className="flex flex-wrap gap-1.5 mb-2">
-                  {formTags.map((tag, idx) => (
-                    <span
-                      key={idx}
-                      className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-lg"
-                    >
-                      <span>#{tag}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveTag(idx)}
-                        className="text-gray-400 hover:text-red-500"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </span>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
-                    placeholder="Add tag..."
-                    className="flex-1 text-xs border border-[#E3E5EC] rounded-xl px-3 py-2 outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddTag}
-                    className="px-3 py-2 bg-gray-800 text-white text-xs font-semibold rounded-xl hover:bg-black"
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
-
+              {/* Modal Actions */}
               <div className="pt-3 border-t border-[#E3E5EC] flex items-center justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => setEditingService(null)}
+                  onClick={() => {
+                    setIsCreateOpen(false);
+                    setEditingService(null);
+                  }}
                   className="px-4 py-2.5 rounded-xl border border-[#E3E5EC] text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-[#2954F5] text-white text-xs font-semibold hover:bg-[#1E42D0] transition-colors cursor-pointer"
+                  disabled={createMutation.isPending || updateMutation.isPending}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#2954F5] text-white text-xs font-semibold hover:bg-[#1E42D0] transition-colors cursor-pointer shadow-md disabled:opacity-50"
                 >
-                  Save Changes
+                  <Save className="w-4 h-4" />
+                  <span>
+                    {createMutation.isPending || updateMutation.isPending
+                      ? "Saving..."
+                      : isCreateOpen
+                      ? "Create Capability"
+                      : "Save Changes"}
+                  </span>
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          DELETE CONFIRMATION MODAL (Custom Modal)
+      ======================================================== */}
+      {deletingService && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-[#E3E5EC] space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-[#12151B]">
+                  Delete Capability
+                </h3>
+                <p className="text-xs text-[#5B5F6B]">
+                  This action cannot be undone.
+                </p>
+              </div>
+            </div>
+
+            <p className="text-xs sm:text-sm text-[#5B5F6B] leading-relaxed">
+              Are you sure you want to permanently delete{" "}
+              <strong className="text-[#12151B]">&ldquo;{deletingService.name}&rdquo;</strong>? This capability card will be removed from the Home Page.
+            </p>
+
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => setDeletingService(null)}
+                className="px-4 py-2.5 rounded-xl border border-[#E3E5EC] text-xs font-semibold text-gray-700 hover:bg-gray-50 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                disabled={deleteMutation.isPending}
+                className="px-5 py-2.5 rounded-xl bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition-colors cursor-pointer shadow-md disabled:opacity-50"
+              >
+                {deleteMutation.isPending ? "Deleting..." : "Confirm Delete"}
+              </button>
+            </div>
           </div>
         </div>
       )}

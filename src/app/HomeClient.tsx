@@ -62,27 +62,27 @@ export default function HomeClient() {
   const servicesToRender: ServiceItem[] =
     dynamicServices.length > 0
       ? dynamicServices.map((s: any) => ({
-          id: s.id || s._id,
-          name: s.name || s.title || "Service",
-          shortDesc: s.shortDesc || s.subtitle || "",
-          description: s.description || s.summary || "",
-          tags: s.tags || [],
-          deliverables: s.deliverables || [],
-          icon: s.icon || "Briefcase",
-          image: s.image || "/img/services/creative-content.jpg",
-        }))
+        id: s.id || s._id,
+        name: s.name || s.title || "Service",
+        shortDesc: s.shortDesc || s.subtitle || "",
+        description: s.description || s.summary || "",
+        tags: s.tags || [],
+        deliverables: s.deliverables || [],
+        icon: s.icon || "Briefcase",
+        image: s.image || "/img/services/creative-content.jpg",
+      }))
       : AGENCY_SERVICES;
 
   const stepsToRender: WorkStep[] =
     dynamicSteps.length > 0
       ? dynamicSteps.map((m: any, i: number) => ({
-          step: m.step || `0${i + 1}`,
-          title: m.title || "Step",
-          tagline: m.tagline || `Phase ${m.step || i + 1}`,
-          desc: m.desc || m.summary || "",
-          bulletPoints: m.bulletPoints || m.milestones || [],
-          iconColor: i % 2 === 0 ? "bg-[#2954F5]" : "bg-[#E51F25]",
-        }))
+        step: m.step || `0${i + 1}`,
+        title: m.title || "Step",
+        tagline: m.tagline || `Phase ${m.step || i + 1}`,
+        desc: m.desc || m.summary || "",
+        bulletPoints: m.bulletPoints || m.milestones || [],
+        iconColor: i % 2 === 0 ? "bg-[#2954F5]" : "bg-[#E51F25]",
+      }))
       : WORK_STEPS;
 
   return (
@@ -113,14 +113,14 @@ export default function HomeClient() {
           2. EDITORIAL MANIFESTO (COMPACT PADDING & MARGIN)
       ======================================================== */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl space-y-2 sm:space-y-3">
-          <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#12151B] tracking-tight leading-snug">
-            {homeContent?.manifestoTitle || "We create brand experiences that inspire behavior."}{" "}
-            <span className="block mt-0.5 font-normal text-[#5B5F6B]">
-              {homeContent?.manifestoSubtitle || "Spinning incredible stories – from emerging startups to household names."}
+        <div className="max-w-4xl space-y-2.5 sm:space-y-3">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-[38px] font-bold text-[#2954F5] tracking-tight leading-snug font-display">
+            {homeContent?.manifestoTitle || "We Build Brands That Stand Out"}{" "}
+            <span className="block mt-1 sm:mt-1.5 text-base sm:text-lg md:text-xl lg:text-[22px] font-semibold text-[#2954F5]/90 tracking-normal leading-snug">
+              {homeContent?.manifestoSubtitle || "Turning ideas into distinctive brands, meaningful connections and measurable growth"}
             </span>
           </h1>
-          <p className="text-xs sm:text-sm md:text-base text-[#5B5F6B] leading-relaxed max-w-3xl font-normal">
+          <p className="text-xs sm:text-sm md:text-base text-[#5B5F6B] leading-relaxed max-w-3xl font-normal pt-0.5">
             {homeContent?.manifestoDesc || "Through new ways of reaching your audience, and by being an integral part of the process all the way from concept to consumer, we help transform your brand presence. We are a full-service marketing and branding agency helping brands and organizations break barriers, pushing your identity forward into the future."}
           </p>
         </div>
@@ -134,6 +134,10 @@ export default function HomeClient() {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 pb-4 sm:pb-8 border-b border-[#E3E5EC]">
               <div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2954F5]/10 text-[#2954F5] text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-2 border border-[#2954F5]/20">
+
+                  How We Work
+                </span>
                 <h2 className="text-xl sm:text-3xl md:text-4xl font-bold text-[#12151B] tracking-tight">
                   {homeContent?.methodologyTitle || "How We Work"}
                 </h2>
@@ -199,6 +203,9 @@ export default function HomeClient() {
             {/* Section Header */}
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 sm:gap-4 pb-3 sm:pb-5 border-b border-white/20">
               <div>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white border border-white/25 text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-2 backdrop-blur-xs">
+                  Our Capabilities
+                </span>
                 <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
                   {homeContent?.servicesTitle || "Our Services"}
                 </h2>

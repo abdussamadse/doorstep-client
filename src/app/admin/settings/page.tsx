@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { AgencyInfo } from "@/data/agencyData";
-import { Save, Check, Building, Phone, Mail, MapPin, Globe, Video, Film, RefreshCw, BarChart3, Activity } from "lucide-react";
+import { Save, Check, Building, Phone, Mail, MapPin, Globe, Video, Film, RefreshCw, BarChart3, Activity, Search } from "lucide-react";
 import { useSettings, useUpdateSettings } from "@/hooks/useCMS";
 import CloudinaryUploader from "@/components/admin/CloudinaryUploader";
 import { useToast } from "@/providers/ToastProvider";
@@ -29,6 +29,14 @@ export default function AdminSettingsPage() {
   const [fbPixelId, setFbPixelId] = useState("");
   const [googleAnalyticsId, setGoogleAnalyticsId] = useState("");
 
+  // Dynamic SEO State
+  const [metaTitle, setMetaTitle] = useState("");
+  const [metaDescription, setMetaDescription] = useState("");
+  const [keywords, setKeywords] = useState("");
+  const [canonicalUrl, setCanonicalUrl] = useState("https://doorstepltdbd.com/");
+  const [ogImage, setOgImage] = useState("");
+  const [noIndex, setNoIndex] = useState(false);
+
   useEffect(() => {
     if (settings) {
       setPhone(settings.phone || "");
@@ -45,6 +53,15 @@ export default function AdminSettingsPage() {
       setYoutube(settings.social?.youtube || "");
       setFbPixelId(settings.fbPixelId || "");
       setGoogleAnalyticsId(settings.googleAnalyticsId || "");
+      setMetaTitle(settings.seo?.metaTitle || "Doorstep Limited - Marketing & Branding Agency Dhaka");
+      setMetaDescription(
+        settings.seo?.metaDescription ||
+          "Full-service branding, digital marketing, creative content, packaging, and strategy agency in Dhaka, Bangladesh."
+      );
+      setKeywords(settings.seo?.keywords || "branding, digital marketing, creative agency, packaging design, Dhaka, Bangladesh");
+      setCanonicalUrl(settings.seo?.canonicalUrl || "https://doorstepltdbd.com/");
+      setOgImage(settings.seo?.ogImage || "");
+      setNoIndex(Boolean(settings.seo?.noIndex));
     }
   }, [settings]);
 
@@ -69,6 +86,14 @@ export default function AdminSettingsPage() {
         },
         fbPixelId: fbPixelId.trim(),
         googleAnalyticsId: googleAnalyticsId.trim(),
+        seo: {
+          metaTitle: metaTitle.trim(),
+          metaDescription: metaDescription.trim(),
+          keywords: keywords.trim(),
+          canonicalUrl: canonicalUrl.trim() || "https://doorstepltdbd.com/",
+          ogImage: ogImage.trim(),
+          noIndex,
+        },
       },
       {
         onSuccess: () => {
@@ -376,6 +401,221 @@ export default function AdminSettingsPage() {
                   className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5]"
                 />
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Dynamic SEO Configuration (Targeted for https://doorstepltdbd.com/) */}
+        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-[#E3E5EC] space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#E3E5EC] gap-2">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600">
+                <Search className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base sm:text-lg font-bold text-[#12151B]">
+                    Search Engine Optimization (SEO)
+                  </h2>
+                  <span className="text-[10px] font-semibold bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-full font-mono">
+                    {canonicalUrl || "https://doorstepltdbd.com/"}
+                  </span>
+                </div>
+                <p className="text-xs text-[#5B5F6B]">
+                  Manage meta titles, search descriptions, keywords, social share image, and Google ranking settings.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs">
+              <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-medium ${!noIndex ? "bg-emerald-50 text-emerald-700 border border-emerald-200" : "bg-amber-50 text-amber-700 border border-amber-200"}`}>
+                <span className={`w-1.5 h-1.5 rounded-full ${!noIndex ? "bg-emerald-500" : "bg-amber-500"}`} />
+                Status: {!noIndex ? "Indexed by Google" : "NoIndex (Hidden)"}
+              </span>
+            </div>
+          </div>
+
+          {/* Google Search Result Live Preview Card */}
+          <div className="bg-[#F8F9FA] rounded-xl p-4 sm:p-5 border border-[#E3E5EC] space-y-2">
+            <div className="flex items-center justify-between text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+              <span className="flex items-center gap-1.5">
+                <Globe className="w-3.5 h-3.5 text-gray-400" />
+                Google Search Result Live Preview
+              </span>
+              <span className="text-[11px] text-gray-400 font-normal normal-case">
+                Simulated search snippet
+              </span>
+            </div>
+
+            <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-xs max-w-2xl font-sans transition-all">
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="w-6 h-6 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-[10px] font-bold text-[#2954F5]">
+                  D
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] text-[#202124] font-medium leading-none truncate">
+                    Doorstep Limited
+                  </p>
+                  <p className="text-[10px] text-[#5f6368] font-mono leading-none truncate mt-0.5">
+                    {canonicalUrl || "https://doorstepltdbd.com/"}
+                  </p>
+                </div>
+              </div>
+              <h3 className="text-[#1a0dab] hover:underline font-medium text-base sm:text-lg leading-snug cursor-pointer line-clamp-1">
+                {metaTitle || "Doorstep Limited - Marketing & Branding Agency Dhaka"}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#4d5156] leading-relaxed line-clamp-2 mt-1">
+                {metaDescription || "Full-service branding, digital marketing, creative content, packaging, and strategy agency in Dhaka, Bangladesh."}
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            {/* Target Canonical URL */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-bold uppercase text-[#12151B]">
+                  Target Canonical Website Link *
+                </label>
+                <span className="text-[11px] text-[#2954F5] font-mono">
+                  Primary indexed URL
+                </span>
+              </div>
+              <input
+                type="url"
+                required
+                value={canonicalUrl}
+                onChange={(e) => setCanonicalUrl(e.target.value)}
+                placeholder="https://doorstepltdbd.com/"
+                className="w-full text-xs sm:text-sm font-mono border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white transition-all shadow-xs"
+              />
+              <p className="text-[11px] text-[#5B5F6B] mt-1">
+                All search engine authority and indexing will point to this canonical address.
+              </p>
+            </div>
+
+            {/* SEO Meta Title */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-bold uppercase text-[#12151B]">
+                  SEO Meta Title (Title Tag) *
+                </label>
+                <span className={`text-[11px] font-mono ${metaTitle.length > 60 ? "text-amber-600 font-bold" : "text-gray-400"}`}>
+                  {metaTitle.length}/60 chars (Recommended: 50-60)
+                </span>
+              </div>
+              <input
+                type="text"
+                required
+                value={metaTitle}
+                onChange={(e) => setMetaTitle(e.target.value)}
+                placeholder="Doorstep Limited - Marketing & Branding Agency Dhaka"
+                className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white transition-all shadow-xs"
+              />
+            </div>
+
+            {/* SEO Meta Description */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-bold uppercase text-[#12151B]">
+                  SEO Meta Description *
+                </label>
+                <span className={`text-[11px] font-mono ${metaDescription.length > 160 ? "text-amber-600 font-bold" : "text-gray-400"}`}>
+                  {metaDescription.length}/160 chars (Recommended: 120-160)
+                </span>
+              </div>
+              <textarea
+                rows={3}
+                required
+                value={metaDescription}
+                onChange={(e) => setMetaDescription(e.target.value)}
+                placeholder="Full-service branding, digital marketing, creative content, packaging, and strategy agency in Dhaka, Bangladesh."
+                className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white transition-all shadow-xs"
+              />
+            </div>
+
+            {/* SEO Meta Keywords */}
+            <div>
+              <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
+                Meta Keywords (Comma Separated)
+              </label>
+              <input
+                type="text"
+                value={keywords}
+                onChange={(e) => setKeywords(e.target.value)}
+                placeholder="branding agency dhaka, digital marketing bangladesh, creative agency, packaging design"
+                className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white transition-all shadow-xs"
+              />
+              <p className="text-[11px] text-[#5B5F6B] mt-1">
+                Separate keywords or phrases with commas.
+              </p>
+            </div>
+
+            {/* Social Share (OpenGraph) Image */}
+            <div className="pt-2">
+              <label className="block text-xs font-bold uppercase text-[#12151B] mb-2">
+                Social Share Image (Facebook, WhatsApp &amp; LinkedIn Preview Banner)
+              </label>
+              <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                <div className="flex-1 w-full">
+                  <input
+                    type="url"
+                    placeholder="https://res.cloudinary.com/... or /logo/80X80 px-01.png"
+                    value={ogImage}
+                    onChange={(e) => setOgImage(e.target.value)}
+                    className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 outline-none focus:border-[#2954F5] bg-white shadow-xs"
+                  />
+                </div>
+                <div className="shrink-0">
+                  <CloudinaryUploader
+                    label="Upload OG Banner"
+                    accept="image/*"
+                    onUploadSuccess={(url: string) => setOgImage(url)}
+                  />
+                </div>
+              </div>
+
+              {ogImage && (
+                <div className="mt-3 flex items-center gap-3 p-2 bg-gray-50 border border-gray-200 rounded-xl max-w-md">
+                  <img
+                    src={ogImage}
+                    alt="Social Preview"
+                    className="w-16 h-12 object-cover rounded-lg border border-gray-200"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-semibold text-gray-800 truncate">Preview banner active</p>
+                    <p className="text-[10px] text-gray-500 truncate">{ogImage}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setOgImage("")}
+                    className="text-xs text-red-500 hover:text-red-700 px-2 py-1 font-semibold cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Search Engine Indexing Toggle */}
+            <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+              <div>
+                <label className="text-xs sm:text-sm font-bold text-[#12151B] block">
+                  Search Engine Visibility
+                </label>
+                <p className="text-xs text-[#5B5F6B]">
+                  Uncheck if you want to temporarily hide this website from Google and other search crawlers.
+                </p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={!noIndex}
+                  onChange={(e) => setNoIndex(!e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+              </label>
             </div>
           </div>
         </div>

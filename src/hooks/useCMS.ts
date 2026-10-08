@@ -133,6 +133,36 @@ export function useServices() {
   });
 }
 
+export function useCreateService() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (newService: Partial<ServiceItem>) => {
+      try {
+        const res = await api.post("/services", newService);
+        if (res.data?.success) return res.data.data;
+      } catch (err) {
+        console.warn("API service create failed, updating local store:", err);
+      }
+      const current = getStoredData<ServiceItem[]>(CMS_KEYS.SERVICES, INITIAL_CMS_DATA.services);
+      const created: ServiceItem = {
+        id: newService.id || `service-${Date.now()}`,
+        name: newService.name || "New Service",
+        shortDesc: newService.shortDesc || "",
+        description: newService.description || "",
+        tags: newService.tags || [],
+        deliverables: newService.deliverables || [],
+        icon: newService.icon || "Briefcase",
+        image: newService.image || "/img/services/creative-content.jpg",
+      };
+      setStoredData(CMS_KEYS.SERVICES, [...current, created]);
+      return created;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["services"] });
+    },
+  });
+}
+
 export function useUpdateService() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -147,6 +177,27 @@ export function useUpdateService() {
       const updated = current.map((s) => (s.id === id ? { ...s, ...data } : s));
       setStoredData(CMS_KEYS.SERVICES, updated);
       return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["services"] });
+    },
+  });
+}
+
+export function useDeleteService() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      try {
+        const res = await api.delete(`/services/${id}`);
+        if (res.data?.success) return true;
+      } catch (err) {
+        console.warn("API service delete failed, updating local store:", err);
+      }
+      const current = getStoredData<ServiceItem[]>(CMS_KEYS.SERVICES, INITIAL_CMS_DATA.services);
+      const updated = current.filter((s) => s.id !== id);
+      setStoredData(CMS_KEYS.SERVICES, updated);
+      return true;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["services"] });
