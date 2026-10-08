@@ -27,6 +27,16 @@ export default function CloudinaryUploader({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Check client-side max size (100MB)
+    const MAX_MB = 100;
+    if (file.size > MAX_MB * 1024 * 1024) {
+      setError(
+        `ফাইল সাইজ খুব বড় (${(file.size / (1024 * 1024)).toFixed(1)} MB)। সর্বোচ্চ ${MAX_MB} MB পর্যন্ত আপলোড করা যাবে।`
+      );
+      e.target.value = "";
+      return;
+    }
+
     setUploading(true);
     setError(null);
     setSuccess(false);
@@ -51,10 +61,21 @@ export default function CloudinaryUploader({
         body: formData,
       });
 
-      const data = await res.json();
+      if (res.status === 413) {
+        throw new Error(
+          "413 Request Entity Too Large: সার্ভারের আপলোড সাইজ লিমিট অতিক্রম করেছে। সার্ভারের Nginx কনফিগারেশনে 'client_max_body_size 100M;' সেট করতে হবে।"
+        );
+      }
 
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to upload file to Cloudinary");
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error(`Server returned status ${res.status}: ${res.statusText}`);
+      }
+
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.message || "Failed to upload file to Cloudinary");
       }
 
       onUploadSuccess(data.data.url);
@@ -69,6 +90,7 @@ export default function CloudinaryUploader({
       e.target.value = "";
     }
   };
+
 
   return (
     <div className="space-y-1.5">
