@@ -33,7 +33,7 @@ export default function AdminPortfolioPage() {
   const { toast } = useToast();
   const confirm = useConfirm();
   const [filterCat, setFilterCat] = useState<string>("All");
-  const { data: items = [], isLoading } = usePortfolios(filterCat);
+  const { data: allItems = [], isLoading } = usePortfolios();
   const createMutation = useCreatePortfolio();
   const updateMutation = useUpdatePortfolio();
   const deleteMutation = useDeletePortfolio();
@@ -105,6 +105,16 @@ export default function AdminPortfolioPage() {
       aspect = "4:5";
     }
 
+    // Ensure valid thumbnail for MongoDB schema (auto-default to video frame if video)
+    const finalThumbnail =
+      formMediaType === "video"
+        ? (formThumbnail ||
+          (formVideoUrl?.includes("cloudinary.com")
+            ? formVideoUrl.replace(/\.(mp4|webm|mov|m4v)(\?.*)?$/i, ".jpg$2")
+            : formVideoUrl) ||
+          "/videos/hero.mp4")
+        : (formThumbnail || "/img/services/brand-identity.jpg");
+
     if (editingItem) {
       // Update
       updateMutation.mutate(
@@ -115,7 +125,7 @@ export default function AdminPortfolioPage() {
             category: formCategory,
             mediaType: formMediaType,
             aspectRatio: aspect,
-            thumbnail: formThumbnail,
+            thumbnail: finalThumbnail,
             videoUrl: formMediaType === "video" ? formVideoUrl : undefined,
             duration: formDuration || undefined,
           },
@@ -145,7 +155,7 @@ export default function AdminPortfolioPage() {
           color: "#1E42D0",
           mediaType: formMediaType,
           aspectRatio: aspect,
-          thumbnail: formThumbnail || "/img/services/creative-content.jpg",
+          thumbnail: finalThumbnail,
           videoUrl: formMediaType === "video" ? formVideoUrl || "/videos/hero.mp4" : undefined,
           duration: formDuration || undefined,
         },
@@ -165,8 +175,8 @@ export default function AdminPortfolioPage() {
 
   const filteredItems =
     filterCat === "All"
-      ? items
-      : items.filter((item) => item.category === filterCat);
+      ? allItems
+      : allItems.filter((item) => item.category === filterCat);
 
   return (
     <div className="space-y-8">
@@ -197,8 +207,8 @@ export default function AdminPortfolioPage() {
           const isActive = filterCat === cat.key;
           const count =
             cat.key === "All"
-              ? items.length
-              : items.filter((i) => i.category === cat.key).length;
+              ? allItems.length
+              : allItems.filter((i) => i.category === cat.key).length;
 
           return (
             <button
@@ -227,13 +237,36 @@ export default function AdminPortfolioPage() {
             <div>
               {/* Media Preview Box */}
               <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-black mb-3">
-                <img
-                  src={item.thumbnail}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                />
+                {item.mediaType === "video" ||
+                item.category === "REELS" ||
+                item.category === "MOTION" ||
+                item.category === "COMMERCIAL" ? (
+                  <video
+                    src={`${item.videoUrl || "/videos/hero.mp4"}#t=0.001`}
+                    poster={
+                      item.videoUrl?.includes("cloudinary.com")
+                        ? item.videoUrl.replace(/\.(mp4|webm|mov|m4v)(\?.*)?$/i, ".jpg$2")
+                        : (item.thumbnail?.startsWith("http") || item.thumbnail?.startsWith("/img"))
+                        ? item.thumbnail
+                        : undefined
+                    }
+                    preload="metadata"
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
+                )}
 
-                {item.mediaType === "video" && (
+                {(item.mediaType === "video" ||
+                  item.category === "REELS" ||
+                  item.category === "MOTION" ||
+                  item.category === "COMMERCIAL") && (
                   <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#E51F25] text-white flex items-center gap-1">
                     <Play className="w-2.5 h-2.5 fill-current" />
                     <span>Video</span>
@@ -358,27 +391,31 @@ export default function AdminPortfolioPage() {
                 onUploadSuccess={(url) => {
                   if (formMediaType === "video" && url.match(/\.(mp4|webm|mov|m4v)$/i)) {
                     setFormVideoUrl(url);
+                    const poster = url.includes("cloudinary.com")
+                      ? url.replace(/\.(mp4|webm|mov|m4v)(\?.*)?$/i, ".jpg$2")
+                      : url;
+                    setFormThumbnail(poster);
                   } else {
                     setFormThumbnail(url);
                   }
                 }}
               />
 
-              <div>
-                <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
-                  Thumbnail Image Path / Cloudinary URL *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formThumbnail}
-                  onChange={(e) => setFormThumbnail(e.target.value)}
-                  placeholder="/img/somboon.jpeg or Cloudinary CDN link"
-                  className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 focus:border-[#2954F5] outline-none"
-                />
-              </div>
-
-              {formMediaType === "video" && (
+              {formMediaType === "image" ? (
+                <div>
+                  <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
+                    Image Path / Cloudinary URL *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formThumbnail}
+                    onChange={(e) => setFormThumbnail(e.target.value)}
+                    placeholder="/img/somboon.jpeg or Cloudinary CDN link"
+                    className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 focus:border-[#2954F5] outline-none"
+                  />
+                </div>
+              ) : (
                 <>
                   <div>
                     <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
@@ -386,9 +423,35 @@ export default function AdminPortfolioPage() {
                     </label>
                     <input
                       type="text"
+                      required
                       value={formVideoUrl}
-                      onChange={(e) => setFormVideoUrl(e.target.value)}
+                      onChange={(e) => {
+                        setFormVideoUrl(e.target.value);
+                        if (!formThumbnail) {
+                          setFormThumbnail(
+                            e.target.value.includes("cloudinary.com")
+                              ? e.target.value.replace(/\.(mp4|webm|mov|m4v)(\?.*)?$/i, ".jpg$2")
+                              : e.target.value
+                          );
+                        }
+                      }}
                       placeholder="/videos/hero.mp4 or Cloudinary video link"
+                      className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 focus:border-[#2954F5] outline-none"
+                    />
+                    <p className="text-[11px] text-[#2954F5] mt-1 font-medium">
+                      ✓ ভিডিওর শুরুর ১ম ফ্রেম স্বয়ংক্রিয়ভাবে পোর্টফোলিওতে প্রিভিউ হিসেবে প্রদর্শিত হবে।
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-[#12151B] mb-1">
+                      Custom Thumbnail (ঐচ্ছিক — খালি রাখলে ভিডিওর ১ম ফ্রেম দেখাবে)
+                    </label>
+                    <input
+                      type="text"
+                      value={formThumbnail}
+                      onChange={(e) => setFormThumbnail(e.target.value)}
+                      placeholder="Optional image link or leave empty"
                       className="w-full text-xs sm:text-sm border border-[#E3E5EC] rounded-xl px-3.5 py-2.5 focus:border-[#2954F5] outline-none"
                     />
                   </div>
@@ -407,6 +470,7 @@ export default function AdminPortfolioPage() {
                   </div>
                 </>
               )}
+
 
               <div className="pt-3 border-t border-[#E3E5EC] flex items-center justify-end gap-3">
                 <button

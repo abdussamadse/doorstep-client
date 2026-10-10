@@ -64,26 +64,47 @@ function PortfolioCard({
   isPlaying: boolean;
   onPlay: () => void;
 }) {
+  const isVideo =
+    item.mediaType === "video" ||
+    item.category === "REELS" ||
+    item.category === "MOTION" ||
+    item.category === "COMMERCIAL" ||
+    Boolean(item.videoUrl);
+
+  const videoSrc = item.videoUrl || "/videos/hero.mp4";
+  const videoPreviewSrc = videoSrc.includes("#") ? videoSrc : `${videoSrc}#t=0.001`;
+  const posterUrl = videoSrc.includes("cloudinary.com")
+    ? videoSrc.replace(/\.(mp4|webm|mov|m4v)(\?.*)?$/i, ".jpg$2")
+    : (item.thumbnail?.startsWith("http") || item.thumbnail?.startsWith("/img"))
+    ? item.thumbnail
+    : undefined;
+
   return (
     <div
       className={`relative w-full rounded-2xl overflow-hidden border border-[#E3E5EC] bg-[#0D0F17] hover:border-[#12151B] hover:shadow-xl transition-all duration-300 group ${aspectClass}`}
     >
-      {item.mediaType === "video" ? (
+      {isVideo ? (
         isPlaying ? (
           <video
-            src={item.videoUrl || "/videos/hero.mp4"}
+            src={videoSrc}
             controls
             autoPlay
             playsInline
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="relative w-full h-full">
-            <img
-              src={item.thumbnail}
-              alt={item.title}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
+          <div
+            className="relative w-full h-full cursor-pointer"
+            onClick={onPlay}
+          >
+            {/* Shows initial video frame without separate thumbnail image */}
+            <video
+              src={videoPreviewSrc}
+              poster={posterUrl}
+              preload="metadata"
+              playsInline
+              muted
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
             />
             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/35 transition-colors pointer-events-none" />
 
